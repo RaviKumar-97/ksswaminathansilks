@@ -52,6 +52,24 @@ export default function ProductClient({ product }: { product: Product }) {
     });
   };
 
+  const whatsappMessage = encodeURIComponent(
+    `Hello,
+
+I am interested in the following saree:
+
+• Name: ${product.name}
+${product.price ? `• Price: ${product.price}` : ''}
+${product.tagline ? `• Category: ${product.tagline}` : ''}
+
+Product Link:
+${typeof window !== 'undefined' ? window.location.href : ''}
+
+Kindly share availability, blouse details, and delivery timeline.
+
+Thank you.`
+  );
+
+
   return (
     <>
       {/* ================= PRODUCT ================= */}
@@ -137,9 +155,8 @@ export default function ProductClient({ product }: { product: Product }) {
                 <button
                   key={i}
                   onClick={() => setIndex(i)}
-                  className={`relative w-20 h-24 border ${
-                    i === index ? 'border-black' : 'border-gray-200'
-                  }`}
+                  className={`relative w-20 h-24 border ${i === index ? 'border-black' : 'border-gray-200'
+                    }`}
                 >
                   <Image src={img} alt="" fill className="object-cover" />
                 </button>
@@ -177,11 +194,10 @@ export default function ProductClient({ product }: { product: Product }) {
                         <button
                           key={tab}
                           onClick={() => setActiveTab(tab)}
-                          className={`pb-3 ${
-                            activeTab === tab
+                          className={`pb-3 ${activeTab === tab
                               ? 'border-b-2 border-black'
                               : 'text-gray-400 hover:text-black'
-                          }`}
+                            }`}
                         >
                           {tab}
                         </button>
@@ -202,21 +218,22 @@ export default function ProductClient({ product }: { product: Product }) {
 
             {/* CTA */}
             <div className="mt-20 flex flex-col gap-8">
-  <a
-    href={`https://wa.me/919999999999?text=Hi, I am interested in ${product.name}`}
-    target="_blank"
-    className="border border-black px-16 py-4 text-xs tracking-[0.35em] hover:bg-black hover:text-white transition"
-  >
-    ORDER VIA WHATSAPP
-  </a>
+             <a
+  href={`https://wa.me/919999999999?text=${whatsappMessage}`}
+  target="_blank"
+  rel="noopener noreferrer"
+  className="bg-black text-white px-10 py-4 tracking-[0.25em] text-sm hover:bg-neutral-900 transition"
+>
+  ORDER VIA WHATSAPP
+</a>
 
-  <Link
-    href="/products"
-    className="text-xs tracking-[0.3em] text-gray-500 hover:text-black transition"
-  >
-    ← BACK TO COLLECTIONS
-  </Link>
-</div>
+              <Link
+                href="/products"
+                className="text-xs tracking-[0.3em] text-gray-500 hover:text-black transition"
+              >
+                ← BACK TO COLLECTIONS
+              </Link>
+            </div>
 
           </motion.div>
         </div>
@@ -279,9 +296,8 @@ export default function ProductClient({ product }: { product: Product }) {
             <div
               className="flex gap-6 transition-transform duration-500"
               style={{
-                transform: `translateX(-${
-                  relatedIndex * (isMobile ? 280 : 336)
-                }px)`,
+                transform: `translateX(-${relatedIndex * (isMobile ? 280 : 336)
+                  }px)`,
               }}
             >
               {relatedProducts.map(rp => (
