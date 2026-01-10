@@ -5,6 +5,9 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useTranslations } from '../hooks/useTranslations';
 import { allProducts } from '../src/data/products';
+import HeroSlider from '../components/HeroSlider';
+import Breadcrumb from '../components/Breadcrumb';
+import { useState } from 'react';
 
 const featuredProducts = allProducts.filter(
   (product) => product.featured
@@ -12,47 +15,30 @@ const featuredProducts = allProducts.filter(
 
 export default function HomePage() {
   const t = useTranslations();
+  const [featuredIndex, setFeaturedIndex] = useState(0);
+
+  const nextFeatured = () => {
+    setFeaturedIndex((prev) => (prev + 1) % featuredProducts.length);
+  };
+
+  const prevFeatured = () => {
+    setFeaturedIndex((prev) => (prev - 1 + featuredProducts.length) % featuredProducts.length);
+  };
 
 
   return (
     <>
-      {/* HEADER */}
-      {/* <Header /> */}
-
-
+      {/* BREADCRUMB */}
+      <div className="max-w-7xl mx-auto px-6 mt-6">
+        <Breadcrumb
+          items={[
+            { label: 'Home' }
+          ]}
+        />
+      </div>
 
       {/* HERO SECTION */}
-      <section className="relative h-[90vh] w-full overflow-hidden">
-        <Image
-          src="/products/hero-silk.jpg"
-          alt="Luxury Silk Sarees"
-          fill
-          priority
-          className="object-cover"
-        />
-        <div className="absolute inset-0 bg-black/40" />
-
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1 }}
-          className="relative z-10 flex h-full flex-col items-center justify-center text-center text-white px-6"
-        >
-          <h1 className="text-4xl md:text-6xl font-serif tracking-wide">
-            {t.home.heroTitle}
-          </h1>
-          <p className="mt-4 max-w-2xl text-lg md:text-xl opacity-90">
-            {t.home.heroSubtitle}
-          </p>
-
-          <Link
-            href="/products"
-            className="mt-8 inline-block border border-white px-8 py-3 text-sm tracking-widest hover:bg-white hover:text-black transition"
-          >
-            {t.home.exploreButton}
-          </Link>
-        </motion.div>
-      </section>
+      <HeroSlider />
 
       {/* BRAND STORY */}
       <section className="py-20 px-6 max-w-6xl mx-auto">
@@ -85,34 +71,54 @@ export default function HomePage() {
             {t.home.featuredTitle}
           </motion.h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {featuredProducts.map((product, index) => (
-              <motion.div
-                key={product.slug}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.15 }}
-                viewport={{ once: true }}
-                className="group bg-white p-4"
+          <div className="relative">
+            <div className="overflow-hidden">
+              <motion.div 
+                className="flex gap-8 transition-transform duration-500"
+                style={{ transform: `translateX(-${featuredIndex * 336}px)` }}
               >
-                <Link href={`/products/${product.slug}`}>
-                  <div className="relative h-80 overflow-hidden">
-                    <Image
-                      src={product.image}
-                      alt={product.name}
-                      fill
-                      className="object-cover group-hover:scale-105 transition duration-500"
-                    />
+                {featuredProducts.map((product) => (
+                  <div
+                    key={product.slug}
+                    className="flex-shrink-0 w-80 group bg-white p-4"
+                  >
+                    <Link href={`/products/${product.slug}`}>
+                      <div className="relative h-80 overflow-hidden">
+                        <Image
+                          src={product.image}
+                          alt={product.name}
+                          fill
+                          className="object-cover group-hover:scale-105 transition duration-500"
+                        />
+                      </div>
+                      <h3 className="mt-4 font-serif text-lg">
+                        {product.name}
+                      </h3>
+                      <p className="text-sm text-gray-500 mt-1">
+                        {product.tagline}
+                      </p>
+                    </Link>
                   </div>
-                  <h3 className="mt-4 font-serif text-lg">
-                    {product.name}
-                  </h3>
-                  <p className="text-sm text-gray-500 mt-1">
-                    {product.tagline}
-                  </p>
-                </Link>
+                ))}
               </motion.div>
-            ))}
+            </div>
+            
+            {featuredIndex > 0 && (
+              <button
+                onClick={prevFeatured}
+                className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 p-3 text-2xl hover:bg-white shadow-lg"
+              >
+                ‹
+              </button>
+            )}
+            {featuredIndex < featuredProducts.length - 3 && (
+              <button
+                onClick={nextFeatured}
+                className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 p-3 text-2xl hover:bg-white shadow-lg"
+              >
+                ›
+              </button>
+            )}
           </div>
         </div>
       </section>

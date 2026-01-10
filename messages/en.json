@@ -85,6 +85,20 @@
   "breadcrumb": {
     "home": "Home",
     "products": "Products"
+  },
+  "footer": {
+    "description": "Authentic Kanchipuram silk sarees crafted with heritage, tradition, and timeless elegance for generations.",
+    "address": "123 Silk Street, Kanchipuram, Tamil Nadu 631502",
+    "phone": "+91 99999 99999",
+    "email": "info@ks.swaminathansilks.com",
+    "quickLinks": "Quick Links",
+    "legal": "Legal",
+    "privacyPolicy": "Privacy Policy",
+    "termsConditions": "Terms & Conditions",
+    "returnPolicy": "Return Policy",
+    "shippingPolicy": "Shipping Policy",
+    "allRightsReserved": "All rights reserved.",
+    "whatsapp": "WhatsApp"
   }
 
 }

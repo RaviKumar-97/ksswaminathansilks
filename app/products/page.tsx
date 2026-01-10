@@ -25,12 +25,12 @@ export default function ProductsPage() {
       </div>
 
       {/* PAGE TITLE */}
-      <section className="py-16 text-center">
+      <section className="pb-16 px-2 text-center ">
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="text-4xl md:text-5xl font-serif"
+          className="text-2xl md:text-5xl font-serif"
         >
           {t.products.title}
         </motion.h1>

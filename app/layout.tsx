@@ -1,6 +1,7 @@
 import './globals.css'
 import { Playfair_Display, Inter } from 'next/font/google'
 import Header from '../components/Header'
+import Footer from '../components/Footer'
 import { LanguageProvider } from '../contexts/LanguageContext'
 
 const playfair = Playfair_Display({
@@ -51,6 +52,7 @@ export default function RootLayout({
         <LanguageProvider>
           <Header />
           {children}
+          <Footer />
         </LanguageProvider>
       </body>
     </html>

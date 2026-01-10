@@ -13,7 +13,7 @@ export default function Header() {
   const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false)
 
   return (
-    <header className="border-b border-[#e6dfd4] bg-white">
+    <header className="sticky top-0 border-b border-[#e6dfd4] bg-white z-40">
       <div className="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
 
         {/* Logo */}
