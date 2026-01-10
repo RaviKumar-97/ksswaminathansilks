@@ -1,123 +1,112 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { motion } from 'framer-motion'
-import en from '../../messages/en.json'
-import ta from '../../messages/ta.json'
-import Breadcrumb from '../../components/Breadcrumb'
-
-type Lang = 'en' | 'ta'
-
-const fadeUp = {
-    hidden: { opacity: 0, y: 30 },
-    visible: { opacity: 1, y: 0 }
-}
+import Image from 'next/image';
+import Link from 'next/link';
+import { motion } from 'framer-motion';
+import Breadcrumb from '../../components/Breadcrumb';
+import { useTranslations } from '../../hooks/useTranslations';
+import { allProducts } from '../../src/data/products';
 
 export default function ProductsPage() {
-    const [lang, setLang] = useState<Lang>('en')
-    const t = lang === 'en' ? en : ta
+  const t = useTranslations();
+  return (
+    <>
+      {/* HEADER */}
+      {/* <Header /> */}
 
-    return (
-        <main className="w-full font-serif text-[#2b2b2b]">
-            <div className="max-w-6xl mx-auto px-6 pt-10">
-                <Breadcrumb
-                    items={[
-                        { label: 'Home', href: '/' },
-                        { label: 'Collection' }
-                    ]}
-                />
-            </div>
+      {/* BREADCRUMB */}
+      <div className="max-w-7xl mx-auto px-6 mt-6">
+        <Breadcrumb
+          items={[
+            { label: 'Home', href: '/' },
+            { label: 'Products' }
+          ]}
+        />
+      </div>
 
+      {/* PAGE TITLE */}
+      <section className="py-16 text-center">
+        <motion.h1
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-4xl md:text-5xl font-serif"
+        >
+          {t.products.title}
+        </motion.h1>
+        <p className="mt-4 text-gray-600 max-w-2xl mx-auto">
+          {t.products.subtitle}
+        </p>
+      </section>
 
-            {/* ================= LANGUAGE SWITCH ================= */}
-            <div className="fixed top-6 right-6 z-50 text-sm tracking-widest bg-white px-4 py-2 border">
-                <button
-                    onClick={() => setLang('en')}
-                    className={lang === 'en' ? 'font-semibold underline' : ''}
-                >
-                    EN
-                </button>
-                {' | '}
-                <button
-                    onClick={() => setLang('ta')}
-                    className={lang === 'ta' ? 'font-semibold underline' : ''}
-                >
-                    தமிழ்
-                </button>
-            </div>
+      {/* PRODUCT GRID */}
+      <section className="pb-24">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+            {allProducts .map((product, index) => (
+              <motion.div
+                key={product.slug}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.15 }}
+                viewport={{ once: true }}
+                className="group bg-white"
+              >
+                <Link href={`/products/${product.slug}`}>
+                  <div className="relative h-[420px] overflow-hidden">
+                    <Image
+                      src={product.image}
+                      alt={product.name}
+                      fill
+                      className="object-cover group-hover:scale-105 transition duration-500"
+                    />
+                  </div>
 
-            {/* ================= HEADER ================= */}
-            <section className="py-32 px-6 text-center bg-[#faf7f2]">
-                <motion.div
-                    initial="hidden"
-                    animate="visible"
-                    variants={fadeUp}
-                    transition={{ duration: 1 }}
-                >
-                    <h1 className="text-4xl mb-6">
-                        {t.products.title}
-                    </h1>
-                    <p className="text-lg text-gray-600">
-                        {t.products.subtitle}
+                  <div className="pt-4">
+                    <h3 className="font-serif text-lg">
+                      {product.name}
+                    </h3>
+                    <p className="text-sm text-gray-500 mt-1">
+                      {product.description}
                     </p>
-                </motion.div>
-            </section>
+                    <p className="mt-2 font-medium">
+                      {product.price}
+                    </p>
 
-            {/* ================= PRODUCT GRID ================= */}
-            <section className="py-32 px-6 max-w-6xl mx-auto">
-                <div className="grid md:grid-cols-3 gap-16">
-                    {t.products.items.map(
-                        (
-                            item: { name: string; description: string },
-                            index: number
-                        ) => (
-                            <motion.div
-                                key={index}
-                                initial="hidden"
-                                whileInView="visible"
-                                viewport={{ once: true }}
-                                variants={fadeUp}
-                                transition={{ duration: 0.8 }}
-                                className="border p-10 text-center hover:shadow-xl transition"
-                            >
-                                {/* Image Placeholder */}
-                                <div className="h-56 bg-[#f1ece4] mb-6 flex items-center justify-center text-sm text-gray-500">
-                                    Image Coming Soon
-                                </div>
+                    <span className="inline-block mt-3 text-sm tracking-widest border-b border-black pb-1">
+                      {t.products.viewDetails}
+                    </span>
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-                                <h2 className="text-xl mb-4">
-                                    {item.name}
-                                </h2>
-
-                                <p className="text-sm text-gray-600 mb-6">
-                                    {item.description}
-                                </p>
-
-                                {/* <a
-                                    href="https://wa.me/91XXXXXXXXXX"
-                                    target="_blank"
-                                    className="inline-block px-6 py-3 border border-[#8b6f47] hover:bg-[#8b6f47] hover:text-white transition"
-                                >
-                                    {t.products.enquire}
-                                </a> */}
-                                <a
-  href={`/products/kanchipuram-silk`}
-  className="inline-block px-6 py-3 border border-[#8b6f47]"
->
-  View Details
-</a>
-
-                            </motion.div>
-                        )
-                    )}
-                </div>
-            </section>
-
-            {/* ================= FOOTER ================= */}
-            <footer className="py-12 text-center text-sm text-gray-500">
-                © {new Date().getFullYear()} {t.brand.name}
-            </footer>
-
-        </main>
-    )
+      {/* WHATSAPP CTA */}
+      <section className="py-16 bg-[#faf7f2] text-center">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+        >
+          <h2 className="text-3xl font-serif mb-4">
+            {t.products.whatsappTitle}
+          </h2>
+          <p className="text-gray-600 mb-8">
+            {t.products.whatsappSubtitle}
+          </p>
+          <a
+            href="https://wa.me/919999999999"
+            target="_blank"
+            className="inline-block bg-black text-white px-10 py-4 tracking-widest hover:bg-gray-800 transition"
+          >
+            {t.products.whatsappButton}
+          </a>
+        </motion.div>
+      </section>
+    </>
+  );
 }

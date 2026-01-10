@@ -1,6 +1,7 @@
 import './globals.css'
 import { Playfair_Display, Inter } from 'next/font/google'
 import Header from '../components/Header'
+import { LanguageProvider } from '../contexts/LanguageContext'
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
@@ -47,34 +48,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${playfair.variable} ${inter.variable}`}>
-  <Header />
-        {children}
+        <LanguageProvider>
+          <Header />
+          {children}
+        </LanguageProvider>
       </body>
     </html>
   )
 }
-
-
-
-// import './globals.css'
-// import Header from '../components/Header'
-
-// export const metadata = {
-//   title: 'KS Swaminathan Silks',
-//   description: 'Timeless heritage silk sarees'
-// }
-
-// export default function RootLayout({
-//   children
-// }: {
-//   children: React.ReactNode
-// }) {
-//   return (
-//     <html lang="en">
-//       <body className="bg-[#faf8f5] text-[#2b2b2b] font-serif">
-//         <Header />
-//         {children}
-//       </body>
-//     </html>
-//   )
-// }

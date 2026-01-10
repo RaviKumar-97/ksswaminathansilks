@@ -1,187 +1,152 @@
-'use client'
+'use client';
 
-import { useState } from 'react'
-import { motion } from 'framer-motion'
-import en from '../messages/en.json'
-import ta from '../messages/ta.json'
+import Image from 'next/image';
+import Link from 'next/link';
+import { motion } from 'framer-motion';
+import { useTranslations } from '../hooks/useTranslations';
+import { allProducts } from '../src/data/products';
 
-type Lang = 'en' | 'ta'
+const featuredProducts = allProducts.filter(
+  (product) => product.featured
+);
 
-const fadeUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: { opacity: 1, y: 0 }
-}
+export default function HomePage() {
+  const t = useTranslations();
 
-export default function Home() {
-  const [lang, setLang] = useState<Lang>('en')
-  const t = lang === 'en' ? en : ta
 
   return (
-    <main className="w-full font-serif text-[#2b2b2b]">
+    <>
+      {/* HEADER */}
+      {/* <Header /> */}
 
-      {/* ================= LANGUAGE SWITCH ================= */}
-      <div className="fixed top-6 right-6 z-50 text-sm tracking-widest bg-white px-4 py-2 border">
-        <button
-          onClick={() => setLang('en')}
-          className={lang === 'en' ? 'font-semibold underline' : ''}
-        >
-          EN
-        </button>
-        {' | '}
-        <button
-          onClick={() => setLang('ta')}
-          className={lang === 'ta' ? 'font-semibold underline' : ''}
-        >
-          தமிழ்
-        </button>
-      </div>
 
-      {/* ================= HERO ================= */}
-      <section className="min-h-screen flex items-center justify-center text-center px-6 bg-[#faf7f2]">
+
+      {/* HERO SECTION */}
+      <section className="relative h-[90vh] w-full overflow-hidden">
+        <Image
+          src="/products/hero-silk.jpg"
+          alt="Luxury Silk Sarees"
+          fill
+          priority
+          className="object-cover"
+        />
+        <div className="absolute inset-0 bg-black/40" />
+
         <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={fadeUp}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1 }}
-          className="max-w-4xl"
+          className="relative z-10 flex h-full flex-col items-center justify-center text-center text-white px-6"
         >
-          <p className="tracking-[0.35em] text-sm text-[#8b6f47] mb-6">
-            {t.brand.name}
-          </p>
-
-          <h1 className="text-4xl md:text-5xl leading-snug">
-            {t.brand.tagline}
+          <h1 className="text-4xl md:text-6xl font-serif tracking-wide">
+            {t.home.heroTitle}
           </h1>
+          <p className="mt-4 max-w-2xl text-lg md:text-xl opacity-90">
+            {t.home.heroSubtitle}
+          </p>
 
-          {/* <a
-            href="https://wa.me/91XXXXXXXXXX"
-            target="_blank"
-            className="inline-block mt-14 px-12 py-4 border border-[#8b6f47] tracking-wide hover:bg-[#8b6f47] hover:text-white transition"
+          <Link
+            href="/products"
+            className="mt-8 inline-block border border-white px-8 py-3 text-sm tracking-widest hover:bg-white hover:text-black transition"
           >
-            {t.buttons.enquire}
-          </a> */}
-          <div className="mt-14 flex flex-col sm:flex-row gap-6 justify-center">
-            <a
-              href="/products"
-              className="px-12 py-4 border border-[#8b6f47] hover:bg-[#8b6f47] hover:text-white transition"
-            >
-              View Collection
-            </a>
-
-            <a
-              href="https://wa.me/91XXXXXXXXXX"
-              target="_blank"
-              className="px-12 py-4 border border-[#8b6f47]"
-            >
-              {t.buttons.enquire}
-            </a>
-          </div>
-
+            {t.home.exploreButton}
+          </Link>
         </motion.div>
       </section>
 
-      {/* ================= HERITAGE ================= */}
-      <section className="py-32 px-6 max-w-5xl mx-auto text-center">
+      {/* BRAND STORY */}
+      <section className="py-20 px-6 max-w-6xl mx-auto">
         <motion.div
-          initial="hidden"
-          whileInView="visible"
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          variants={fadeUp}
-          transition={{ duration: 0.9 }}
+          className="text-center"
         >
-          <h2 className="text-3xl mb-10 text-[#8b6f47]">
-            {t.sections.heritageTitle}
+          <h2 className="text-3xl md:text-4xl font-serif mb-6">
+            {t.home.storyTitle}
           </h2>
-
-          <p className="text-lg leading-relaxed">
-            {t.sections.heritageText}
+          <p className="text-gray-600 leading-relaxed max-w-3xl mx-auto">
+            {t.home.storyDescription}
           </p>
         </motion.div>
       </section>
 
-      {/* ================= COLLECTIONS ================= */}
-      <section className="py-32 px-6 bg-white">
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={fadeUp}
-          transition={{ duration: 0.9 }}
-        >
-          <h2 className="text-3xl text-center mb-20 text-[#8b6f47]">
-            {t.sections.collectionsTitle}
-          </h2>
+      {/* FEATURED COLLECTION */}
+      <section className="py-16 bg-[#faf7f2]">
+        <div className="max-w-7xl mx-auto px-6">
+          <motion.h2
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center text-3xl md:text-4xl font-serif mb-12"
+          >
+            {t.home.featuredTitle}
+          </motion.h2>
 
-          <div className="grid md:grid-cols-3 gap-16 max-w-6xl mx-auto">
-            {t.sections.collections.map((item: string, index: number) => (
-              <div
-                key={index}
-                className="border p-12 text-center hover:shadow-xl transition"
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {featuredProducts.map((product, index) => (
+              <motion.div
+                key={product.slug}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.15 }}
+                viewport={{ once: true }}
+                className="group bg-white p-4"
               >
-                <p className="text-xl">{item}</p>
-              </div>
+                <Link href={`/products/${product.slug}`}>
+                  <div className="relative h-80 overflow-hidden">
+                    <Image
+                      src={product.image}
+                      alt={product.name}
+                      fill
+                      className="object-cover group-hover:scale-105 transition duration-500"
+                    />
+                  </div>
+                  <h3 className="mt-4 font-serif text-lg">
+                    {product.name}
+                  </h3>
+                  <p className="text-sm text-gray-500 mt-1">
+                    {product.tagline}
+                  </p>
+                </Link>
+              </motion.div>
             ))}
           </div>
-        </motion.div>
+        </div>
       </section>
 
-      {/* ================= WHY US ================= */}
-      <section className="py-32 px-6 max-w-6xl mx-auto">
+      {/* WHATSAPP CTA */}
+      <section className="py-20 px-6 text-center">
         <motion.div
-          initial="hidden"
-          whileInView="visible"
+          initial={{ opacity: 0, scale: 0.95 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          variants={fadeUp}
-          transition={{ duration: 0.9 }}
         >
-          <h2 className="text-3xl text-center mb-20 text-[#8b6f47]">
-            {t.sections.whyTitle}
+          <h2 className="text-3xl md:text-4xl font-serif mb-4">
+            {t.home.whatsappTitle}
           </h2>
-
-          <div className="grid md:grid-cols-3 gap-16 text-center">
-            {t.sections.why.map(
-              (
-                item: { title: string; text: string },
-                index: number
-              ) => (
-                <div key={index}>
-                  <p className="text-xl mb-4">{item.title}</p>
-                  <p className="leading-relaxed">{item.text}</p>
-                </div>
-              )
-            )}
-          </div>
-        </motion.div>
-      </section>
-
-      {/* ================= FINAL CTA ================= */}
-      <section className="py-32 text-center bg-[#faf7f2] px-6">
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          variants={fadeUp}
-          transition={{ duration: 0.9 }}
-        >
-          <h2 className="text-3xl mb-10">
-            {t.sections.ctaTitle}
-          </h2>
-
+          <p className="text-gray-600 mb-8">
+            {t.home.whatsappSubtitle}
+          </p>
           <a
-            href="https://wa.me/91XXXXXXXXXX"
+            href="https://wa.me/919999999999"
             target="_blank"
-            className="inline-block px-14 py-4 border border-[#8b6f47] hover:bg-[#8b6f47] hover:text-white transition"
+            className="inline-block bg-black text-white px-10 py-4 tracking-widest hover:bg-gray-800 transition"
           >
-            {t.sections.ctaButton}
+            {t.home.whatsappButton}
           </a>
         </motion.div>
       </section>
 
-      {/* ================= FOOTER ================= */}
-      <footer className="py-12 text-center text-sm text-gray-500">
-        © {new Date().getFullYear()} {t.brand.name}. All rights reserved.
-      </footer>
+      {/* FOOTER */}
+      <footer className="border-t py-6 text-center text-sm text-gray-500">
+        {/* © {new Date().getFullYear()} K S Swaminathan Silks. All rights reserved. */}
+        © {new Date().getFullYear()} {t.brand?.name ?? 'K S Swaminathan Silks'}
 
-    </main>
-  )
+      </footer>
+    </>
+  );
 }
