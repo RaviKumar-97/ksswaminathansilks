@@ -57,7 +57,7 @@ export default function HeroSlider() {
         </motion.div>
       </AnimatePresence>
 
-      <div className="absolute inset-0 bg-black/40" />
+      <div className="absolute inset-0 bg-black/30" />
 
       <motion.div
         key={`content-${currentSlide}`}
@@ -66,7 +66,7 @@ export default function HeroSlider() {
         transition={{ duration: 1, delay: 0.5 }}
         className="relative z-10 flex h-full flex-col items-center justify-center text-center text-white px-6"
       >
-        <h1 className="text-4xl md:text-6xl font-serif tracking-wide">
+        <h1 className="text-4xl md:text-6xl font-serif tracking-[0.08em] leading-tight">
           {slides[currentSlide].title}
         </h1>
         <p className="mt-4 max-w-2xl text-lg md:text-xl opacity-90">
@@ -75,8 +75,7 @@ export default function HeroSlider() {
 
         <Link
           href="/products"
-          className="mt-8 inline-block border border-white px-8 py-3 text-sm tracking-widest hover:bg-white hover:text-black transition"
-        >
+className="mt-10 inline-block border border-white px-12 py-4 text-xs tracking-[0.3em] hover:bg-white hover:text-black transition"        >
           {t.home.exploreButton}
         </Link>
       </motion.div>
