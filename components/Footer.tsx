@@ -51,7 +51,7 @@ export default function Footer() {
         <div className="border-t border-gray-700 mt-8 pt-6 flex flex-col md:flex-row justify-between items-center text-sm text-gray-400">
           <p>© {new Date().getFullYear()} {t.brand.name}. {t.footer.allRightsReserved}</p>
           <div className="flex gap-4 mt-4 md:mt-0">
-            <a href="https://wa.me/919999999999" target="_blank" className="hover:text-white transition">
+            <a href="https://wa.me/919944541985" target="_blank" className="hover:text-white transition">
               {t.footer.whatsapp}
             </a>
             <span>|</span>
