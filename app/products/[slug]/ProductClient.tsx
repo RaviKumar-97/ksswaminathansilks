@@ -21,6 +21,8 @@ export default function ProductClient({ product }: { product: Product }) {
 
   const [relatedIndex, setRelatedIndex] = useState(0);
 
+  const [whatsappMessage, setWhatsappMessage] = useState('');
+
   /* ---------- SAFE MOBILE CHECK ---------- */
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
@@ -28,6 +30,27 @@ export default function ProductClient({ product }: { product: Product }) {
     window.addEventListener('resize', check);
     return () => window.removeEventListener('resize', check);
   }, []);
+
+  /* ---------- WHATSAPP MESSAGE ---------- */
+  useEffect(() => {
+    const message = encodeURIComponent(
+      `Hello,
+
+I am interested in the following saree:
+
+• Name: ${product.name}
+${product.price ? `• Price: ${product.price}` : ''}
+${product.tagline ? `• Category: ${product.tagline}` : ''}
+
+Product Link:
+${window.location.href}
+
+Kindly share availability, blouse details, and delivery timeline.
+
+Thank you.`
+    );
+    setWhatsappMessage(message);
+  }, [product.name, product.price, product.tagline]);
 
   const nextRelated = () =>
     setRelatedIndex(prev => (prev + 1) % relatedProducts.length);
@@ -51,23 +74,6 @@ export default function ProductClient({ product }: { product: Product }) {
       show: true,
     });
   };
-
-  const whatsappMessage = encodeURIComponent(
-    `Hello,
-
-I am interested in the following saree:
-
-• Name: ${product.name}
-${product.price ? `• Price: ${product.price}` : ''}
-${product.tagline ? `• Category: ${product.tagline}` : ''}
-
-Product Link:
-${typeof window !== 'undefined' ? window.location.href : ''}
-
-Kindly share availability, blouse details, and delivery timeline.
-
-Thank you.`
-  );
 
 
   return (
