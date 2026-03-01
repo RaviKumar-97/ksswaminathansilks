@@ -29,13 +29,13 @@ export default function HomePage() {
   return (
     <>
       {/* BREADCRUMB */}
-      <div className="max-w-7xl mx-auto px-6 mt-6">
+      {/* <div className="max-w-7xl mx-auto px-6 mt-6">
         <Breadcrumb
           items={[
             { label: 'Home' }
           ]}
         />
-      </div>
+      </div> */}
 
       {/* HERO SECTION */}
       <HeroSlider />
@@ -73,13 +73,13 @@ export default function HomePage() {
 
           <div className="relative">
             <div className="overflow-hidden">
-              <motion.div 
+              <motion.div
                 className="flex gap-8 transition-transform duration-500"
                 style={{ transform: `translateX(-${featuredIndex * 336}px)` }}
               >
-                {featuredProducts.map((product) => (
+                {[...featuredProducts, ...featuredProducts].map((product, idx) => (
                   <div
-                    key={product.slug}
+                    key={`${product.slug}-${idx}`}
                     className="flex-shrink-0 w-80 group bg-white p-4"
                   >
                     <Link href={`/products/${product.slug}`}>
@@ -102,23 +102,19 @@ export default function HomePage() {
                 ))}
               </motion.div>
             </div>
-            
-            {featuredIndex > 0 && (
-              <button
-                onClick={prevFeatured}
-                className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 p-3 text-2xl hover:bg-white shadow-lg"
-              >
-                ‹
-              </button>
-            )}
-            {featuredIndex < featuredProducts.length - 3 && (
-              <button
-                onClick={nextFeatured}
-                className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 p-3 text-2xl hover:bg-white shadow-lg"
-              >
-                ›
-              </button>
-            )}
+
+            <button
+              onClick={prevFeatured}
+              className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 p-3 text-2xl hover:bg-white shadow-lg z-10"
+            >
+              ‹
+            </button>
+            <button
+              onClick={nextFeatured}
+              className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 p-3 text-2xl hover:bg-white shadow-lg z-10"
+            >
+              ›
+            </button>
           </div>
         </div>
       </section>

@@ -1,13 +1,12 @@
-export const dynamic = "force-static";
+import { MetadataRoute } from 'next'
 
-export default function robots() {
+export default function robots(): MetadataRoute.Robots {
   return {
-    rules: [
-      {
-        userAgent: '*',
-        allow: '/'
-      }
-    ],
-    sitemap: 'https://YOUR-DOMAIN.com/sitemap.xml'
+    rules: {
+      userAgent: '*',
+      allow: '/',
+      disallow: ['/api/', '/admin/'],
+    },
+    sitemap: 'https://ksswaminathansilks.com/sitemap.xml',
   }
 }
