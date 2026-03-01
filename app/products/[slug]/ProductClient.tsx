@@ -19,7 +19,13 @@ export default function ProductClient({ product }: { product: Product }) {
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
   const [isMobile, setIsMobile] = useState(false);
 
-  const [relatedIndex, setRelatedIndex] = useState(0);
+  const [relatedIndex, setRelatedIndex] = useState(() => {
+    // Start at a position that shows clean 4-product groups on desktop
+    return Math.floor(relatedProducts.length / 4) * 4;
+  });
+  const relatedCarouselRef = useRef(null);
+
+  const tripleRelatedProducts = [...relatedProducts, ...relatedProducts, ...relatedProducts];
 
   const [whatsappMessage, setWhatsappMessage] = useState('');
 
@@ -52,13 +58,37 @@ Thank you.`
     setWhatsappMessage(message);
   }, [product.name, product.price, product.tagline]);
 
-  const nextRelated = () =>
-    setRelatedIndex(prev => (prev + 1) % relatedProducts.length);
+  const nextRelated = () => {
+    setRelatedIndex(prev => prev + 1);
+  };
 
-  const prevRelated = () =>
-    setRelatedIndex(prev =>
-      (prev - 1 + relatedProducts.length) % relatedProducts.length
-    );
+  const prevRelated = () => {
+    setRelatedIndex(prev => prev - 1);
+  };
+
+  useEffect(() => {
+    const carousel = relatedCarouselRef.current;
+    if (!carousel) return;
+
+    const handleTransitionEnd = () => {
+      if (relatedIndex >= relatedProducts.length * 2) {
+        carousel.style.transition = 'none';
+        setRelatedIndex(relatedProducts.length);
+        setTimeout(() => {
+          carousel.style.transition = 'transform 0.5s ease-in-out';
+        }, 10);
+      } else if (relatedIndex <= 0) {
+        carousel.style.transition = 'none';
+        setRelatedIndex(relatedProducts.length);
+        setTimeout(() => {
+          carousel.style.transition = 'transform 0.5s ease-in-out';
+        }, 10);
+      }
+    };
+
+    carousel.addEventListener('transitionend', handleTransitionEnd);
+    return () => carousel.removeEventListener('transitionend', handleTransitionEnd);
+  }, [relatedIndex]);
 
   /* ---------- DESKTOP ZOOM ---------- */
   const [zoom, setZoom] = useState({ x: 50, y: 50, show: false });
@@ -292,24 +322,25 @@ Thank you.`
       </AnimatePresence>
 
       {/* ================= RELATED PRODUCTS ================= */}
-      <section className="max-w-7xl mx-auto px-6 md:px-10 pb-24">
+      <section className="max-w-[90rem] mx-auto px-6 md:px-10 pb-24">
         <h2 className="text-3xl font-serif mb-14 text-center">
           Related Products
         </h2>
 
         <div className="relative">
-          <div className="overflow-hidden">
+          <div className="overflow-hidden ">
             <div
-              className="flex gap-6 transition-transform duration-500"
+              ref={relatedCarouselRef}
+              className="flex gap-6"
               style={{
-                transform: `translateX(-${relatedIndex * (isMobile ? 280 : 336)
-                  }px)`,
+                transform: `translateX(-${relatedIndex * (isMobile ? 280 : 336)}px)`,
+                transition: 'transform 0.5s ease-in-out'
               }}
             >
-              {relatedProducts.map(rp => (
-                <div key={rp.slug} className="flex-shrink-0 w-64 md:w-80">
+              {tripleRelatedProducts.map((rp, idx) => (
+                <div key={`${rp.slug}-${idx}`} className="flex-shrink-0 w-64 md:w-80">
                   <Link href={`/products/${rp.slug}`}>
-                    <div className="relative h-80 bg-[#faf7f2] mb-4 overflow-hidden">
+                    <div className="relative h-64 md:h-80 bg-[#faf7f2] mb-4 overflow-hidden">
                       <Image
                         src={rp.image}
                         alt={rp.name}
@@ -317,10 +348,10 @@ Thank you.`
                         className="object-cover hover:scale-105 transition"
                       />
                     </div>
-                    <h3 className="font-serif text-lg">{rp.name}</h3>
-                    <p className="text-gray-600 text-sm">{rp.tagline}</p>
+                    <h3 className="font-serif text-base md:text-lg">{rp.name}</h3>
+                    <p className="text-gray-600 text-xs md:text-sm">{rp.tagline}</p>
                     {rp.price && (
-                      <p className="mt-2 font-medium">{rp.price}</p>
+                      <p className="mt-2 font-medium text-sm md:text-base">{rp.price}</p>
                     )}
                   </Link>
                 </div>
@@ -328,23 +359,18 @@ Thank you.`
             </div>
           </div>
 
-          {relatedIndex > 0 && (
-            <button
-              onClick={prevRelated}
-              className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 p-3 text-2xl"
-            >
-              ‹
-            </button>
-          )}
-
-          {relatedIndex < relatedProducts.length - 1 && (
-            <button
-              onClick={nextRelated}
-              className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 p-3 text-2xl"
-            >
-              ›
-            </button>
-          )}
+          <button
+            onClick={prevRelated}
+            className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 p-3 text-2xl hover:bg-white shadow-lg z-10"
+          >
+            ‹
+          </button>
+          <button
+            onClick={nextRelated}
+            className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 p-3 text-2xl hover:bg-white shadow-lg z-10"
+          >
+            ›
+          </button>
         </div>
       </section>
     </>

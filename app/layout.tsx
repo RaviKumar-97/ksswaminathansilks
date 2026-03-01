@@ -3,8 +3,6 @@ import { Playfair_Display, Inter } from 'next/font/google'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import StructuredData from '../components/StructuredData'
-import SEODebug from '../components/SEODebug'
-import { LanguageProvider } from '../contexts/LanguageContext'
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
@@ -100,12 +98,9 @@ export default function RootLayout({
       </head>
       <body className={`${playfair.variable} ${inter.variable}`}>
         <StructuredData />
-        <LanguageProvider>
-          <Header />
-          {children}
-          <Footer />
-        </LanguageProvider>
-        <SEODebug />
+        <Header />
+        {children}
+        <Footer />
       </body>
     </html>
   )

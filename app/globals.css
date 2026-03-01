@@ -2,23 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-/* CSS Variables (safe for Tailwind v3) */
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-/* Dark mode variables */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 /* Base body styles */
 body {
-  background-color: var(--background);
-  color: var(--foreground);
+  background-color: #ffffff;
+  color: #171717;
   font-family: Arial, Helvetica, sans-serif;
 }

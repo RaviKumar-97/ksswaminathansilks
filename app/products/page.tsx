@@ -4,18 +4,16 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import Breadcrumb from '../../components/Breadcrumb';
-import { useTranslations } from '../../hooks/useTranslations';
 import { allProducts } from '../../src/data/products';
 
 export default function ProductsPage() {
-  const t = useTranslations();
   return (
     <>
       {/* HEADER */}
       {/* <Header /> */}
 
       {/* BREADCRUMB */}
-      <div className="max-w-7xl mx-auto px-6 mt-6">
+      <div className="max-w-[90rem] mx-auto px-6 mt-6">
         <Breadcrumb
           items={[
             { label: 'Home', href: '/' },
@@ -32,16 +30,16 @@ export default function ProductsPage() {
           transition={{ duration: 0.6 }}
           className="text-2xl md:text-5xl font-serif"
         >
-          {t.products.title}
+          Our Silk Collections
         </motion.h1>
         <p className="mt-4 text-gray-600 max-w-2xl mx-auto">
-          {t.products.subtitle}
+          Discover handwoven silk sarees crafted with tradition, purity, and timeless luxury.
         </p>
       </section>
 
       {/* PRODUCT GRID */}
       <section className="pb-24">
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="max-w-[90rem] mx-auto px-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
             {allProducts .map((product, index) => (
               <motion.div
@@ -74,7 +72,7 @@ export default function ProductsPage() {
                     </p>
 
                     <span className="inline-block mt-3 text-sm tracking-widest border-b border-black pb-1">
-                      {t.products.viewDetails}
+                      VIEW DETAILS
                     </span>
                   </div>
                 </Link>
@@ -93,17 +91,17 @@ export default function ProductsPage() {
           viewport={{ once: true }}
         >
           <h2 className="text-3xl font-serif mb-4">
-            {t.products.whatsappTitle}
+            Need help choosing the perfect saree?
           </h2>
           <p className="text-gray-600 mb-8">
-            {t.products.whatsappSubtitle}
+            Our experts are available on WhatsApp to assist you personally.
           </p>
           <a
             href="https://wa.me/919944541985"
             target="_blank"
             className="inline-block bg-black text-white px-10 py-4 tracking-widest hover:bg-gray-800 transition"
           >
-            {t.products.whatsappButton}
+            CHAT ON WHATSAPP
           </a>
         </motion.div>
       </section>

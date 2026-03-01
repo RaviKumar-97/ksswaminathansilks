@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useTranslations } from '../hooks/useTranslations';
 
 const slides = [
   {
@@ -25,7 +24,6 @@ const slides = [
 ];
 
 export default function HeroSlider() {
-  const t = useTranslations();
   const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
@@ -76,7 +74,7 @@ export default function HeroSlider() {
         <Link
           href="/products"
 className="mt-10 inline-block border border-white px-12 py-4 text-xs tracking-[0.3em] hover:bg-white hover:text-black transition"        >
-          {t.home.exploreButton}
+          Explore Collection
         </Link>
       </motion.div>
 

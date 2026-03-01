@@ -3,33 +3,69 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { useTranslations } from '../hooks/useTranslations';
 import { allProducts } from '../src/data/products';
 import HeroSlider from '../components/HeroSlider';
 import Breadcrumb from '../components/Breadcrumb';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 const featuredProducts = allProducts.filter(
   (product) => product.featured
 );
 
 export default function HomePage() {
-  const t = useTranslations();
-  const [featuredIndex, setFeaturedIndex] = useState(0);
+  const [featuredIndex, setFeaturedIndex] = useState(() => {
+    // Start at a position that shows clean 4-product groups on desktop
+    return Math.floor(featuredProducts.length / 4) * 4;
+  });
+  const [isMobile, setIsMobile] = useState(false);
+  const carouselRef = useRef(null);
+
+  const tripleProducts = [...featuredProducts, ...featuredProducts, ...featuredProducts];
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const nextFeatured = () => {
-    setFeaturedIndex((prev) => (prev + 1) % featuredProducts.length);
+    setFeaturedIndex(prev => prev + 1);
   };
 
   const prevFeatured = () => {
-    setFeaturedIndex((prev) => (prev - 1 + featuredProducts.length) % featuredProducts.length);
+    setFeaturedIndex(prev => prev - 1);
   };
+
+  useEffect(() => {
+    const carousel = carouselRef.current;
+    if (!carousel) return;
+
+    const handleTransitionEnd = () => {
+      if (featuredIndex >= featuredProducts.length * 2) {
+        carousel.style.transition = 'none';
+        setFeaturedIndex(featuredProducts.length);
+        setTimeout(() => {
+          carousel.style.transition = 'transform 0.5s ease-in-out';
+        }, 10);
+      } else if (featuredIndex <= 0) {
+        carousel.style.transition = 'none';
+        setFeaturedIndex(featuredProducts.length);
+        setTimeout(() => {
+          carousel.style.transition = 'transform 0.5s ease-in-out';
+        }, 10);
+      }
+    };
+
+    carousel.addEventListener('transitionend', handleTransitionEnd);
+    return () => carousel.removeEventListener('transitionend', handleTransitionEnd);
+  }, [featuredIndex]);
 
 
   return (
     <>
       {/* BREADCRUMB */}
-      {/* <div className="max-w-7xl mx-auto px-6 mt-6">
+      {/* <div className="max-w-[90rem] mx-auto px-6 mt-6">
         <Breadcrumb
           items={[
             { label: 'Home' }
@@ -50,17 +86,17 @@ export default function HomePage() {
           className="text-center"
         >
           <h2 className="text-3xl md:text-4xl font-serif mb-6">
-            {t.home.storyTitle}
+            A Legacy Woven in Silk
           </h2>
           <p className="text-gray-600 leading-relaxed max-w-3xl mx-auto">
-            {t.home.storyDescription}
+            At K.S. Swaminathan Silks, every saree tells a story of heritage, craftsmanship, and timeless elegance. Rooted in tradition and guided by excellence, our collection reflects the soul of Kanchipuram weaving.
           </p>
         </motion.div>
       </section>
 
       {/* FEATURED COLLECTION */}
       <section className="py-16 bg-[#faf7f2]">
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="max-w-[90rem] mx-auto px-6">
           <motion.h2
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
@@ -68,22 +104,26 @@ export default function HomePage() {
             viewport={{ once: true }}
             className="text-center text-3xl md:text-4xl font-serif mb-12"
           >
-            {t.home.featuredTitle}
+            Featured Sarees
           </motion.h2>
 
           <div className="relative">
-            <div className="overflow-hidden">
-              <motion.div
-                className="flex gap-8 transition-transform duration-500"
-                style={{ transform: `translateX(-${featuredIndex * 336}px)` }}
+            <div className="overflow-hidden ">
+              <div
+                ref={carouselRef}
+                className="flex gap-6"
+                style={{ 
+                  transform: `translateX(-${featuredIndex * (isMobile ? 280 : 336)}px)`,
+                  transition: 'transform 0.5s ease-in-out'
+                }}
               >
-                {[...featuredProducts, ...featuredProducts].map((product, idx) => (
+                {tripleProducts.map((product, idx) => (
                   <div
                     key={`${product.slug}-${idx}`}
-                    className="flex-shrink-0 w-80 group bg-white p-4"
+                    className="flex-shrink-0 w-64 md:w-80 group bg-white p-4"
                   >
                     <Link href={`/products/${product.slug}`}>
-                      <div className="relative h-80 overflow-hidden">
+                      <div className="relative h-64 md:h-80 overflow-hidden">
                         <Image
                           src={product.image}
                           alt={product.name}
@@ -91,16 +131,16 @@ export default function HomePage() {
                           className="object-cover group-hover:scale-105 transition duration-500"
                         />
                       </div>
-                      <h3 className="mt-4 font-serif text-lg">
+                      <h3 className="mt-4 font-serif text-base md:text-lg">
                         {product.name}
                       </h3>
-                      <p className="text-sm text-gray-500 mt-1">
+                      <p className="text-xs md:text-sm text-gray-500 mt-1">
                         {product.tagline}
                       </p>
                     </Link>
                   </div>
                 ))}
-              </motion.div>
+              </div>
             </div>
 
             <button
@@ -128,17 +168,17 @@ export default function HomePage() {
           viewport={{ once: true }}
         >
           <h2 className="text-3xl md:text-4xl font-serif mb-4">
-            {t.home.whatsappTitle}
+            Personalized Assistance
           </h2>
           <p className="text-gray-600 mb-8">
-            {t.home.whatsappSubtitle}
+            Connect with us directly on WhatsApp for exclusive guidance and curated recommendations.
           </p>
           <a
             href="https://wa.me/919944541985"
             target="_blank"
             className="inline-block bg-black text-white px-10 py-4 tracking-widest hover:bg-gray-800 transition"
           >
-            {t.home.whatsappButton}
+            Chat on WhatsApp
           </a>
         </motion.div>
       </section>
@@ -146,7 +186,7 @@ export default function HomePage() {
       {/* FOOTER */}
       <footer className="border-t py-6 text-center text-sm text-gray-500">
         {/* © {new Date().getFullYear()} K S Swaminathan Silks. All rights reserved. */}
-        © {new Date().getFullYear()} {t.brand?.name ?? 'K S Swaminathan Silks'}
+        © {new Date().getFullYear()} KS Swaminathan Silks
 
       </footer>
     </>
