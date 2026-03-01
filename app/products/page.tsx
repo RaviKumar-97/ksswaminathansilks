@@ -6,7 +6,30 @@ import { motion } from 'framer-motion';
 import Breadcrumb from '../../components/Breadcrumb';
 import { allProducts } from '../../src/data/products';
 
+import { useState, useEffect } from 'react';
+
 export default function ProductsPage() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isMobile, setIsMobile] = useState(false);
+  // const productGridRef = useRef(null);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  const productsPerPage = isMobile ? 8 : 9;
+  const totalPages = Math.ceil(allProducts.length / productsPerPage);
+  
+  const startIndex = (currentPage - 1) * productsPerPage;
+  const currentProducts = allProducts.slice(startIndex, startIndex + productsPerPage);
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
   return (
     <>
       {/* HEADER */}
@@ -41,7 +64,7 @@ export default function ProductsPage() {
       <section className="pb-24">
         <div className="max-w-[90rem] mx-auto px-6">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-            {allProducts .map((product, index) => (
+            {currentProducts.map((product, index) => (
               <motion.div
                 key={product.slug}
                 initial={{ opacity: 0, y: 30 }}
@@ -67,11 +90,16 @@ export default function ProductsPage() {
                     <p className="text-sm text-gray-500 mt-1">
                       {product.description}
                     </p>
-                    <p className="mt-2 font-medium">
-                      {product.price}
-                    </p>
+                    {product.originalPrice && product.discountedPrice ? (
+                      <div className="mt-2 flex items-center gap-2">
+                        <span className="text-sm text-gray-400 line-through">{product.originalPrice}</span>
+                        <span className="font-medium text-red-600">{product.discountedPrice}</span>
+                      </div>
+                    ) : product.price && (
+                      <p className="mt-2 font-medium">{product.price}</p>
+                    )}
 
-                    <span className="inline-block mt-3 text-sm tracking-widest border-b border-black pb-1">
+                    <span className="inline-block mt-3 text-sm tracking-widest border-b bg-blue-600 text-white border-blue-600 rounded-md px-3 py-2 transition-all duration-300">
                       VIEW DETAILS
                     </span>
                   </div>
@@ -79,6 +107,43 @@ export default function ProductsPage() {
               </motion.div>
             ))}
           </div>
+
+          {/* PAGINATION */}
+          {totalPages > 1 && (
+            <div className="flex justify-center items-center gap-4 mt-12">
+              <button
+                onClick={() => handlePageChange(Math.max(currentPage - 1, 1))}
+                disabled={currentPage === 1}
+                className="px-4 py-2 border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+              >
+                Previous
+              </button>
+              
+              <div className="flex gap-2">
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                  <button
+                    key={page}
+                    onClick={() => handlePageChange(page)}
+                    className={`px-4 py-2 border ${
+                      currentPage === page
+                        ? 'bg-black text-white border-black'
+                        : 'border-gray-300 hover:bg-gray-50'
+                    }`}
+                  >
+                    {page}
+                  </button>
+                ))}
+              </div>
+              
+              <button
+                onClick={() => handlePageChange(Math.min(currentPage + 1, totalPages))}
+                disabled={currentPage === totalPages}
+                className="px-4 py-2 border border-gray-300 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+              >
+                Next
+              </button>
+            </div>
+          )}
         </div>
       </section>
 

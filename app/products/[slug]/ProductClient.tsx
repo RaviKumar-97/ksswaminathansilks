@@ -168,7 +168,7 @@ Thank you.`
                     e.stopPropagation();
                     setIndex(index - 1);
                   }}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 px-4 py-2 text-3xl"
+              className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 w-12 h-12 rounded-full flex items-center justify-center text-2xl hover:bg-white shadow-lg z-10"
                 >
                   ‹
                 </button>
@@ -180,7 +180,8 @@ Thank you.`
                     e.stopPropagation();
                     setIndex(index + 1);
                   }}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 px-4 py-2 text-3xl"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 w-12 h-12 rounded-full flex items-center justify-center text-2xl hover:bg-white shadow-lg z-10"
+
                 >
                   ›
                 </button>
@@ -211,16 +212,34 @@ Thank you.`
 
             <p className="mt-8 text-gray-500 max-w-sm leading-relaxed">{product.tagline}</p>
 
-            {product.price && (
+            {product.originalPrice && product.discountedPrice ? (
+              <div className="mt-10 flex items-center gap-3">
+                <span className="text-lg text-gray-500 line-through">{product.originalPrice}</span>
+                <span className="text-2xl font-medium text-red-600">{product.discountedPrice}</span>
+              </div>
+            ) : product.price && (
               <p className="mt-10 text-2xl font-medium">{product.price}</p>
             )}
 
             {product.description && (
               <p className="mt-10 text-gray-600 leading-loose max-w-sm">
-
                 {product.description}
               </p>
             )}
+
+            {/* STOCK STATUS */}
+            <div className="mt-6">
+              <div className="flex items-center gap-2">
+                <div className="relative">
+                  <div className="w-5 h-5 bg-green-600 rounded-full flex items-center justify-center">
+                    <span className="text-white text-xs">✓</span>
+                  </div>
+                  <div className="absolute inset-0 w-5 h-5 bg-green-600 rounded-full animate-ping opacity-75"></div>
+                </div>
+                <p className="text-green-600 font-medium">In stock</p>
+              </div>
+              <p className="text-sm text-amber-800 mt-1">Only <span className="text-red-600">1 item(s)</span> left in stock</p>
+            </div>
 
             {/* DETAILS */}
             {product.details && (
@@ -352,7 +371,12 @@ Thank you.`
                     </div>
                     <h3 className="font-serif text-base md:text-lg">{rp.name}</h3>
                     <p className="text-gray-600 text-xs md:text-sm">{rp.tagline}</p>
-                    {rp.price && (
+                    {rp.originalPrice && rp.discountedPrice ? (
+                      <div className="mt-2 flex items-center gap-2">
+                        <span className="text-xs md:text-sm text-gray-400 line-through">{rp.originalPrice}</span>
+                        <span className="font-medium text-sm md:text-base text-red-600">{rp.discountedPrice}</span>
+                      </div>
+                    ) : rp.price && (
                       <p className="mt-2 font-medium text-sm md:text-base">{rp.price}</p>
                     )}
                   </Link>
@@ -363,13 +387,13 @@ Thank you.`
 
           <button
             onClick={prevRelated}
-            className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 p-3 text-2xl hover:bg-white shadow-lg z-10"
+            className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 w-12 h-12 rounded-full flex items-center justify-center text-2xl hover:bg-white shadow-lg z-10"
           >
             ‹
           </button>
           <button
             onClick={nextRelated}
-            className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 p-3 text-2xl hover:bg-white shadow-lg z-10"
+            className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 w-12 h-12 rounded-full flex items-center justify-center text-2xl hover:bg-white shadow-lg z-10"
           >
             ›
           </button>
