@@ -18,6 +18,7 @@ export default function ProductClient({ product }: { product: Product }) {
 
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [isClient, setIsClient] = useState(false);
 
   const [relatedIndex, setRelatedIndex] = useState(() => {
     // Start at a position that shows clean 4-product groups on desktop
@@ -31,6 +32,7 @@ export default function ProductClient({ product }: { product: Product }) {
 
   /* ---------- SAFE MOBILE CHECK ---------- */
   useEffect(() => {
+    setIsClient(true);
     const check = () => setIsMobile(window.innerWidth < 768);
     check();
     window.addEventListener('resize', check);
@@ -333,7 +335,7 @@ Thank you.`
               ref={relatedCarouselRef}
               className="flex gap-6"
               style={{
-                transform: `translateX(-${relatedIndex * (isMobile ? 280 : 336)}px)`,
+                transform: `translateX(-${relatedIndex * (isClient && isMobile ? 280 : 336)}px)`,
                 transition: 'transform 0.5s ease-in-out'
               }}
             >

@@ -18,11 +18,13 @@ export default function HomePage() {
     return Math.floor(featuredProducts.length / 4) * 4;
   });
   const [isMobile, setIsMobile] = useState(false);
+  const [isClient, setIsClient] = useState(false);
   const carouselRef = useRef(null);
 
   const tripleProducts = [...featuredProducts, ...featuredProducts, ...featuredProducts];
 
   useEffect(() => {
+    setIsClient(true);
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
     window.addEventListener('resize', checkMobile);
@@ -113,7 +115,7 @@ export default function HomePage() {
                 ref={carouselRef}
                 className="flex gap-6"
                 style={{ 
-                  transform: `translateX(-${featuredIndex * (isMobile ? 280 : 336)}px)`,
+                  transform: `translateX(-${featuredIndex * (isClient && isMobile ? 280 : 336)}px)`,
                   transition: 'transform 0.5s ease-in-out'
                 }}
               >
