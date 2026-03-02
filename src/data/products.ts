@@ -35,11 +35,11 @@ export const allProducts: Product[] = [
     price: '₹32,000',
     originalPrice: '₹35,000',
     discountedPrice: '₹32,000',
-    image: '/products/saree1.jpg',
+    image: '/products/saree8.jpg',
     images: [
-      '/products/saree1.jpg',
-      '/products/saree1.jpg',
-      '/products/saree1.jpg'
+      '/products/saree8.jpg',
+      '/products/saree9.jpg',
+      '/products/saree12.jpg'
     ],
     description: 'Handwoven Kanchipuram silk with rich zari borders',
     featured: true,

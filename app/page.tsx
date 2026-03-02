@@ -4,193 +4,157 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { allProducts } from '../src/data/products';
-import HeroSlider from '../components/HeroSlider';
-import Breadcrumb from '../components/Breadcrumb';
-import { useState, useEffect, useRef } from 'react';
+import Hero from '../components/Hero';
+import ProductCard from '../components/ProductCard';
+import BrandStorySlider from '../components/BrandStorySlider';
 
-const featuredProducts = allProducts.filter(
-  (product) => product.featured
-);
+const featuredProducts = allProducts.filter(p => p.featured).slice(0, 4);
+const bestSellers = allProducts.slice(0, 8);
 
 export default function HomePage() {
-  const [featuredIndex, setFeaturedIndex] = useState(() => {
-    // Start at a position that shows clean 4-product groups on desktop
-    return Math.floor(featuredProducts.length / 4) * 4;
-  });
-  const [isMobile, setIsMobile] = useState(false);
-  const [isClient, setIsClient] = useState(false);
-  const carouselRef = useRef(null);
-
-  const tripleProducts = [...featuredProducts, ...featuredProducts, ...featuredProducts];
-
-  useEffect(() => {
-    setIsClient(true);
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  const nextFeatured = () => {
-    setFeaturedIndex(prev => prev + 1);
-  };
-
-  const prevFeatured = () => {
-    setFeaturedIndex(prev => prev - 1);
-  };
-
-  useEffect(() => {
-    const carousel = carouselRef.current;
-    if (!carousel) return;
-
-    const handleTransitionEnd = () => {
-      if (featuredIndex >= featuredProducts.length * 2) {
-        carousel.style.transition = 'none';
-        setFeaturedIndex(featuredProducts.length);
-        setTimeout(() => {
-          carousel.style.transition = 'transform 0.5s ease-in-out';
-        }, 10);
-      } else if (featuredIndex <= 0) {
-        carousel.style.transition = 'none';
-        setFeaturedIndex(featuredProducts.length);
-        setTimeout(() => {
-          carousel.style.transition = 'transform 0.5s ease-in-out';
-        }, 10);
-      }
-    };
-
-    carousel.addEventListener('transitionend', handleTransitionEnd);
-    return () => carousel.removeEventListener('transitionend', handleTransitionEnd);
-  }, [featuredIndex]);
-
-
   return (
     <>
-      {/* BREADCRUMB */}
-      {/* <div className="max-w-[90rem] mx-auto px-6 mt-6">
-        <Breadcrumb
-          items={[
-            { label: 'Home' }
-          ]}
-        />
-      </div> */}
+      {/* HERO */}
+      <Hero />
 
-      {/* HERO SECTION */}
-      <HeroSlider />
-
-      {/* BRAND STORY */}
-      <section className="py-20 px-6 max-w-6xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="text-center"
-        >
-          <h2 className="text-3xl md:text-4xl font-serif mb-6">
-            A Legacy Woven in Silk
-          </h2>
-          <p className="text-gray-600 leading-relaxed max-w-3xl mx-auto">
-            At K.S. Swaminathan Silks, every saree tells a story of heritage, craftsmanship, and timeless elegance. Rooted in tradition and guided by excellence, our collection reflects the soul of Kanchipuram weaving.
-          </p>
-        </motion.div>
-      </section>
-
-      {/* FEATURED COLLECTION */}
-      <section className="py-16 bg-[#faf7f2]">
-        <div className="max-w-[90rem] mx-auto px-6">
-          <motion.h2
+      {/* FEATURED COLLECTIONS */}
+      <section className="py-20 bg-background">
+        <div className="max-w-7xl mx-auto px-6">
+          <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="text-center text-3xl md:text-4xl font-serif mb-12"
+            className="text-center mb-16"
           >
-            Featured Sarees
-          </motion.h2>
+            <h2 className="font-serif text-4xl md:text-5xl text-gray-900 mb-4">
+              Featured Collections
+            </h2>
+            <div className="w-16 h-px bg-accent mx-auto" />
+          </motion.div>
 
-          <div className="relative">
-            <div className="overflow-hidden ">
-              <div
-                ref={carouselRef}
-                className="flex gap-6"
-                style={{ 
-                  transform: `translateX(-${featuredIndex * (isClient && isMobile ? 280 : 336)}px)`,
-                  transition: 'transform 0.5s ease-in-out'
-                }}
-              >
-                {tripleProducts.map((product, idx) => (
-                  <div
-                    key={`${product.slug}-${idx}`}
-                    className="flex-shrink-0 w-64 md:w-80 group bg-white p-4"
-                  >
-                    <Link href={`/products/${product.slug}`}>
-                      <div className="relative h-64 md:h-80 overflow-hidden">
-                        <Image
-                          src={product.image}
-                          alt={product.name}
-                          fill
-                          className="object-cover group-hover:scale-105 transition duration-500"
-                        />
-                      </div>
-                      <h3 className="mt-4 font-serif text-base md:text-lg">
-                        {product.name}
-                      </h3>
-                      <p className="text-xs md:text-sm text-gray-500 mt-1">
-                        {product.tagline}
-                      </p>
-                    </Link>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <button
-              onClick={prevFeatured}
-              className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 w-12 h-12 rounded-full flex items-center justify-center text-2xl hover:bg-white shadow-lg z-10"
-            >
-              ‹
-            </button>
-            <button
-              onClick={nextFeatured}
-              className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 w-12 h-12 rounded-full flex items-center justify-center text-2xl hover:bg-white shadow-lg z-10"
-            >
-              ›
-            </button>
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {featuredProducts.map((product) => (
+              <ProductCard key={product.slug} product={product} />
+            ))}
           </div>
         </div>
       </section>
 
+      {/* BRAND STORY */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid md:grid-cols-2 gap-16 items-center">
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+            >
+              <h2 className="font-serif text-4xl md:text-5xl text-gray-900 mb-6">
+                A Legacy Woven in Silk
+              </h2>
+              <div className="w-16 h-px bg-accent mb-6" />
+              <p className="text-gray-600 leading-relaxed mb-4">
+                At Zari Ragam, every saree tells a story of heritage, 
+                craftsmanship, and timeless elegance. Rooted in tradition and guided 
+                by excellence, our collection reflects the soul of Kanchipuram weaving.
+              </p>
+              <p className="text-gray-600 leading-relaxed">
+                For generations, we have preserved the art of handloom silk, 
+                bringing you sarees that embody grace, purity, and cultural richness.
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+            >
+              <BrandStorySlider />
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* BEST SELLERS */}
+      <section className="py-20 bg-background">
+        <div className="max-w-7xl mx-auto px-6">
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="font-serif text-4xl md:text-5xl text-gray-900 mb-4">
+              Best Sellers
+            </h2>
+            <div className="w-16 h-px bg-accent mx-auto" />
+          </motion.div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {bestSellers.map((product) => (
+              <ProductCard key={product.slug} product={product} />
+            ))}
+          </div>
+
+          <div className="text-center mt-12">
+            <Link
+              href="/products"
+              className="inline-block border border-primary text-primary px-10 py-3 text-sm tracking-widest hover:bg-primary hover:text-white transition-colors duration-300"
+            >
+              VIEW ALL PRODUCTS
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* TESTIMONIALS */}
+      <section className="py-20 bg-white">
+        <div className="max-w-4xl mx-auto px-6 text-center">
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+          >
+            <div className="w-16 h-px bg-accent mx-auto mb-8" />
+            <p className="font-serif text-2xl md:text-3xl text-gray-900 italic mb-6">
+              "The quality and craftsmanship of these sarees are unmatched. 
+              A true celebration of our heritage."
+            </p>
+            <p className="text-sm tracking-widest text-gray-600">— PRIYA SHARMA</p>
+            <div className="w-16 h-px bg-accent mx-auto mt-8" />
+          </motion.div>
+        </div>
+      </section>
+
       {/* WHATSAPP CTA */}
-      <section className="py-20 px-6 text-center">
+      <section className="py-20 bg-primary text-white text-center">
         <motion.div
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
+          className="max-w-3xl mx-auto px-6"
         >
-          <h2 className="text-3xl md:text-4xl font-serif mb-4">
+          <h2 className="font-serif text-3xl md:text-4xl mb-4">
             Personalized Assistance
           </h2>
-          <p className="text-gray-600 mb-8">
-            Connect with us directly on WhatsApp for exclusive guidance and curated recommendations.
+          <p className="text-white/90 mb-8">
+            Connect with us on WhatsApp for exclusive guidance and curated recommendations.
           </p>
           <a
             href="https://wa.me/919944541985"
             target="_blank"
-            className="inline-block bg-black text-white px-10 py-4 tracking-widest hover:bg-gray-800 transition"
+            className="inline-block bg-white text-primary px-10 py-4 text-sm tracking-widest hover:bg-accent hover:text-white transition-colors duration-300"
           >
-            Chat on WhatsApp
+            CHAT ON WHATSAPP
           </a>
         </motion.div>
       </section>
-
-      {/* FOOTER */}
-      <footer className="border-t py-6 text-center text-sm text-gray-500">
-        {/* © {new Date().getFullYear()} K S Swaminathan Silks. All rights reserved. */}
-        © {new Date().getFullYear()} KS Swaminathan Silks
-
-      </footer>
     </>
   );
 }

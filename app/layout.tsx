@@ -3,23 +3,26 @@ import { Playfair_Display, Inter } from 'next/font/google'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 import StructuredData from '../components/StructuredData'
+import WhatsAppFloat from '../components/WhatsAppFloat'
 
 const playfair = Playfair_Display({
   subsets: ['latin'],
-  variable: '--font-playfair'
+  variable: '--font-playfair',
+  display: 'swap',
 })
 
 const inter = Inter({
   subsets: ['latin'],
-  variable: '--font-inter'
+  variable: '--font-inter',
+  display: 'swap',
 })
 
 export const metadata = {
   title: {
-    default: 'KS Swaminathan Silks | Premium Kanchipuram Silk Sarees Online',
-    template: '%s | KS Swaminathan Silks'
+    default: 'Zari Ragam | Premium Kanchipuram Silk Sarees Online',
+    template: '%s | Zari Ragam'
   },
-  description: 'Buy authentic Kanchipuram silk sarees online at KS Swaminathan Silks. Premium quality wedding silk sarees, traditional designs, pure silk with gold zari work. Free shipping across India.',
+  description: 'Buy authentic Kanchipuram silk sarees online at Zari Ragam. Premium quality wedding silk sarees, traditional designs, pure silk with gold zari work. Free shipping across India.',
   keywords: [
     'Kanchipuram silk sarees online',
     'buy silk sarees online',
@@ -28,33 +31,33 @@ export const metadata = {
     'traditional silk sarees',
     'gold zari sarees',
     'bridal silk sarees',
-    'KS Swaminathan Silks',
+    'Zari Ragam',
     'silk sarees India',
     'authentic Kanchipuram sarees'
   ],
-  authors: [{ name: 'KS Swaminathan Silks' }],
-  creator: 'KS Swaminathan Silks',
-  publisher: 'KS Swaminathan Silks',
+  authors: [{ name: 'Zari Ragam' }],
+  creator: 'Zari Ragam',
+  publisher: 'Zari Ragam',
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://ksswaminathansilks.com'),
+  metadataBase: new URL('https://zariragam.com'),
   alternates: {
     canonical: '/',
   },
   openGraph: {
-    title: 'KS Swaminathan Silks | Premium Kanchipuram Silk Sarees',
+    title: 'Zari Ragam | Premium Kanchipuram Silk Sarees',
     description: 'Discover authentic Kanchipuram silk sarees with traditional craftsmanship. Premium quality wedding and bridal silk sarees online.',
-    url: 'https://ksswaminathansilks.com',
-    siteName: 'KS Swaminathan Silks',
+    url: 'https://zariragam.com',
+    siteName: 'Zari Ragam',
     images: [
       {
         url: '/og-image.jpg',
         width: 1200,
         height: 630,
-        alt: 'KS Swaminathan Silks - Premium Kanchipuram Silk Sarees',
+        alt: 'Zari Ragam - Premium Kanchipuram Silk Sarees',
       },
     ],
     locale: 'en_IN',
@@ -62,7 +65,7 @@ export const metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'KS Swaminathan Silks | Premium Kanchipuram Silk Sarees',
+    title: 'Zari Ragam | Premium Kanchipuram Silk Sarees',
     description: 'Authentic Kanchipuram silk sarees with traditional craftsmanship',
     images: ['/og-image.jpg'],
   },
@@ -90,7 +93,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="canonical" href="https://ksswaminathansilks.com" />
+        <link rel="canonical" href="https://zariragam.com" />
         <meta name="geo.region" content="IN-TN" />
         <meta name="geo.placename" content="Tamil Nadu, India" />
         <meta name="geo.position" content="11.1271;78.6569" />
@@ -101,6 +104,7 @@ export default function RootLayout({
         <Header />
         {children}
         <Footer />
+        <WhatsAppFloat />
       </body>
     </html>
   )

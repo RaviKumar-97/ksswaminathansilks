@@ -26,7 +26,7 @@ export async function generateMetadata({
 
   return {
     title: `${product.name} - Premium Kanchipuram Silk Saree Online`,
-    description: `Buy ${product.name} online at KS Swaminathan Silks. ${product.description} Premium quality silk saree with authentic craftsmanship. Free shipping across India.`,
+    description: `Buy ${product.name} online at Zari Ragam. ${product.description} Premium quality silk saree with authentic craftsmanship. Free shipping across India.`,
     keywords: [
       product.name,
       'Kanchipuram silk saree',
@@ -37,7 +37,7 @@ export async function generateMetadata({
       'traditional saree'
     ],
     openGraph: {
-      title: `${product.name} | KS Swaminathan Silks`,
+      title: `${product.name} | Zari Ragam`,
       description: `${product.description} - Premium quality Kanchipuram silk saree`,
       images: [{
         url: product.image,
@@ -49,7 +49,7 @@ export async function generateMetadata({
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${product.name} | KS Swaminathan Silks`,
+      title: `${product.name} | Zari Ragam`,
       description: product.description,
       images: [product.image],
     },
