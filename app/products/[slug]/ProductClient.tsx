@@ -28,6 +28,26 @@ export default function ProductClient({ product }: { product: Product }) {
 
   const tripleRelatedProducts = [...relatedProducts, ...relatedProducts, ...relatedProducts];
 
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStart - touchEnd > 50) {
+      nextRelated();
+    }
+    if (touchStart - touchEnd < -50) {
+      prevRelated();
+    }
+  };
+
   const [whatsappMessage, setWhatsappMessage] = useState('');
 
   /* ---------- SAFE MOBILE CHECK ---------- */
@@ -107,6 +127,28 @@ Thank you.`
     });
   };
 
+  /* ---------- MOBILE ZOOM ---------- */
+  const [mobileZoom, setMobileZoom] = useState({ scale: 1, x: 0, y: 0 });
+  const [lastTap, setLastTap] = useState(0);
+
+  const handleDoubleTap = (e: React.TouchEvent) => {
+    const now = Date.now();
+    if (now - lastTap < 300) {
+      e.preventDefault();
+      if (mobileZoom.scale === 1) {
+        const rect = containerRef.current?.getBoundingClientRect();
+        if (rect) {
+          const x = ((e.touches[0]?.clientX || e.changedTouches[0].clientX) - rect.left) / rect.width;
+          const y = ((e.touches[0]?.clientY || e.changedTouches[0].clientY) - rect.top) / rect.height;
+          setMobileZoom({ scale: 2.5, x: x * 100, y: y * 100 });
+        }
+      } else {
+        setMobileZoom({ scale: 1, x: 0, y: 0 });
+      }
+    }
+    setLastTap(now);
+  };
+
 
   return (
     <>
@@ -121,9 +163,12 @@ Thank you.`
               onMouseMove={handleMouseMove}
               onMouseLeave={() => setZoom(z => ({ ...z, show: false }))}
               onClick={() => !isMobile && setIsOpen(true)}
-              onTouchStart={e => setTouchStartX(e.touches[0].clientX)}
+              onTouchStart={e => {
+                handleDoubleTap(e);
+                if (mobileZoom.scale === 1) setTouchStartX(e.touches[0].clientX);
+              }}
               onTouchEnd={e => {
-                if (touchStartX === null) return;
+                if (mobileZoom.scale > 1 || touchStartX === null) return;
                 const diff = touchStartX - e.changedTouches[0].clientX;
                 if (diff > 50 && index < gallery.length - 1) setIndex(index + 1);
                 if (diff < -50 && index > 0) setIndex(index - 1);
@@ -139,6 +184,11 @@ Thank you.`
                   exit={{ opacity: 0.8, scale: 0.98 }}
                   transition={{ duration: 0.6, ease: 'easeOut' }}
                   className="absolute inset-0"
+                  style={isMobile && mobileZoom.scale > 1 ? {
+                    transform: `scale(${mobileZoom.scale})`,
+                    transformOrigin: `${mobileZoom.x}% ${mobileZoom.y}%`,
+                    transition: 'transform 0.3s ease'
+                  } : {}}
                 >
                   <Image
                     src={gallery[index]}
@@ -162,7 +212,7 @@ Thank you.`
                 </motion.div>
               </AnimatePresence>
 
-              {index > 0 && (
+              {index > 0 && mobileZoom.scale === 1 && (
                 <button
                   onClick={e => {
                     e.stopPropagation();
@@ -174,7 +224,7 @@ Thank you.`
                 </button>
               )}
 
-              {index < gallery.length - 1 && (
+              {index < gallery.length - 1 && mobileZoom.scale === 1 && (
                 <button
                   onClick={e => {
                     e.stopPropagation();
@@ -184,6 +234,15 @@ Thank you.`
 
                 >
                   ›
+                </button>
+              )}
+
+              {isMobile && mobileZoom.scale > 1 && (
+                <button
+                  onClick={() => setMobileZoom({ scale: 1, x: 0, y: 0 })}
+                  className="absolute top-4 right-4 bg-black/70 text-white px-4 py-2 rounded-full text-sm z-10"
+                >
+                  Reset Zoom
                 </button>
               )}
             </div>
@@ -348,7 +407,12 @@ Thank you.`
           Related Products
         </h2>
 
-        <div className="relative">
+        <div 
+          className="relative"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
           <div className="overflow-hidden ">
             <div
               ref={relatedCarouselRef}
@@ -387,13 +451,13 @@ Thank you.`
 
           <button
             onClick={prevRelated}
-            className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 w-12 h-12 rounded-full flex items-center justify-center text-2xl hover:bg-white shadow-lg z-10"
+            className="hidden lg:flex absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 w-12 h-12 rounded-full items-center justify-center text-2xl hover:bg-white shadow-lg z-10"
           >
             ‹
           </button>
           <button
             onClick={nextRelated}
-            className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 w-12 h-12 rounded-full flex items-center justify-center text-2xl hover:bg-white shadow-lg z-10"
+            className="hidden lg:flex absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 w-12 h-12 rounded-full items-center justify-center text-2xl hover:bg-white shadow-lg z-10"
           >
             ›
           </button>
