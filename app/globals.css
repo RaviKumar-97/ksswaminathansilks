@@ -2,8 +2,44 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  :root {
+    --color-ivory: #FAF7F2;
+    --color-gold: #C9A961;
+    --color-silk: #E8DCC4;
+    --color-heritage: #8B7355;
+    --color-royal: #2C1810;
+  }
+}
+
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
 body {
-  background-color: #F8F5F0;
-  color: #1a1a1a;
+  background-color: var(--color-ivory);
+  color: var(--color-royal);
   font-family: var(--font-inter), sans-serif;
+  letter-spacing: 0.01em;
+}
+
+/* Premium Typography */
+.font-serif {
+  letter-spacing: 0.02em;
+  font-weight: 400;
+}
+
+/* Luxury Shadows */
+.shadow-luxury {
+  box-shadow: 0 10px 40px rgba(44, 24, 16, 0.08);
+}
+
+.shadow-luxury-hover {
+  box-shadow: 0 20px 60px rgba(44, 24, 16, 0.12);
+}
+
+/* Smooth Transitions */
+* {
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }

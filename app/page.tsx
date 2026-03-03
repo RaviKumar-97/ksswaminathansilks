@@ -7,6 +7,7 @@ import { allProducts } from '../src/data/products';
 import Hero from '../components/Hero';
 import ProductCard from '../components/ProductCard';
 import BrandStorySlider from '../components/BrandStorySlider';
+import HeritageSection from '../components/HeritageSection';
 
 const featuredProducts = allProducts.filter(p => p.featured).slice(0, 4);
 const bestSellers = allProducts.slice(0, 8);
@@ -16,6 +17,9 @@ export default function HomePage() {
     <>
       {/* HERO */}
       <Hero />
+
+      {/* HERITAGE SECTION */}
+      <HeritageSection />
 
       {/* FEATURED COLLECTIONS */}
       <section className="py-20 bg-background">

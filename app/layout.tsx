@@ -99,7 +99,7 @@ export default function RootLayout({
         <meta name="geo.position" content="11.1271;78.6569" />
         <meta name="ICBM" content="11.1271, 78.6569" />
       </head>
-      <body className={`${playfair.variable} ${inter.variable}`}>
+      <body className={`${playfair.variable} ${inter.variable} overflow-x-hidden`}>
         <StructuredData />
         <Header />
         {children}

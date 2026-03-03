@@ -84,15 +84,19 @@ export default function Hero() {
         transition={{ duration: 0.8, delay: 0.2 }}
         className="relative z-10 flex h-full flex-col items-center justify-center text-center text-white px-6"
       >
+        <div className="mb-4">
+          <div className="w-px h-16 bg-white/60 mx-auto mb-4" />
+          <p className="text-xs tracking-[0.4em] text-white/90 uppercase">Handloom Heritage</p>
+        </div>
         <h1 className="font-serif text-5xl md:text-7xl tracking-wide mb-6">
           Timeless Elegance
         </h1>
-        <p className="text-lg md:text-xl max-w-2xl mb-10 font-light">
-          Handwoven silk sarees crafted with heritage and artistry
+        <p className="text-lg md:text-xl max-w-2xl mb-10 font-light leading-relaxed">
+          Pure Kanchipuram silk sarees woven in our own looms
         </p>
         <Link
           href="/products"
-          className="bg-white text-primary px-10 py-4 text-sm tracking-widest hover:bg-accent hover:text-white transition-colors duration-300"
+          className="bg-white text-[#2C1810] px-12 py-5 text-sm tracking-[0.2em] hover:bg-[#C9A961] hover:text-white transition-all duration-300 shadow-luxury"
         >
           EXPLORE COLLECTION
         </Link>

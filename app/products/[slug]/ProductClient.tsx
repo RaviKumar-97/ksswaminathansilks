@@ -127,33 +127,11 @@ Thank you.`
     });
   };
 
-  /* ---------- MOBILE ZOOM ---------- */
-  const [mobileZoom, setMobileZoom] = useState({ scale: 1, x: 0, y: 0 });
-  const [lastTap, setLastTap] = useState(0);
-
-  const handleDoubleTap = (e: React.TouchEvent) => {
-    const now = Date.now();
-    if (now - lastTap < 300) {
-      e.preventDefault();
-      if (mobileZoom.scale === 1) {
-        const rect = containerRef.current?.getBoundingClientRect();
-        if (rect) {
-          const x = ((e.touches[0]?.clientX || e.changedTouches[0].clientX) - rect.left) / rect.width;
-          const y = ((e.touches[0]?.clientY || e.changedTouches[0].clientY) - rect.top) / rect.height;
-          setMobileZoom({ scale: 2.5, x: x * 100, y: y * 100 });
-        }
-      } else {
-        setMobileZoom({ scale: 1, x: 0, y: 0 });
-      }
-    }
-    setLastTap(now);
-  };
-
 
   return (
     <>
       {/* ================= PRODUCT ================= */}
-      <section className="max-w-7xl mx-auto px-6 md:px-12 pb-28">
+      <section className="max-w-7xl mx-auto px-6 md:px-12 pb-28 pt-12">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-24 items-start">
 
           {/* ================= IMAGE COLUMN ================= */}
@@ -162,19 +140,16 @@ Thank you.`
               ref={containerRef}
               onMouseMove={handleMouseMove}
               onMouseLeave={() => setZoom(z => ({ ...z, show: false }))}
-              onClick={() => !isMobile && setIsOpen(true)}
-              onTouchStart={e => {
-                handleDoubleTap(e);
-                if (mobileZoom.scale === 1) setTouchStartX(e.touches[0].clientX);
-              }}
+              onClick={() => setIsOpen(true)}
+              onTouchStart={e => setTouchStartX(e.touches[0].clientX)}
               onTouchEnd={e => {
-                if (mobileZoom.scale > 1 || touchStartX === null) return;
+                if (touchStartX === null) return;
                 const diff = touchStartX - e.changedTouches[0].clientX;
                 if (diff > 50 && index < gallery.length - 1) setIndex(index + 1);
                 if (diff < -50 && index > 0) setIndex(index - 1);
                 setTouchStartX(null);
               }}
-              className="relative aspect-[3/4] bg-[#faf7f2] overflow-hidden cursor-zoom-in"
+              className="relative aspect-[3/4] bg-[#faf7f2] overflow-hidden cursor-zoom-in shadow-luxury hover:shadow-luxury-hover transition-shadow duration-500"
             >
               <AnimatePresence mode="wait">
                 <motion.div
@@ -184,11 +159,6 @@ Thank you.`
                   exit={{ opacity: 0.8, scale: 0.98 }}
                   transition={{ duration: 0.6, ease: 'easeOut' }}
                   className="absolute inset-0"
-                  style={isMobile && mobileZoom.scale > 1 ? {
-                    transform: `scale(${mobileZoom.scale})`,
-                    transformOrigin: `${mobileZoom.x}% ${mobileZoom.y}%`,
-                    transition: 'transform 0.3s ease'
-                  } : {}}
                 >
                   <Image
                     src={gallery[index]}
@@ -212,7 +182,7 @@ Thank you.`
                 </motion.div>
               </AnimatePresence>
 
-              {index > 0 && mobileZoom.scale === 1 && (
+              {index > 0 && (
                 <button
                   onClick={e => {
                     e.stopPropagation();
@@ -224,7 +194,7 @@ Thank you.`
                 </button>
               )}
 
-              {index < gallery.length - 1 && mobileZoom.scale === 1 && (
+              {index < gallery.length - 1 && (
                 <button
                   onClick={e => {
                     e.stopPropagation();
@@ -236,48 +206,65 @@ Thank you.`
                   ›
                 </button>
               )}
-
-              {isMobile && mobileZoom.scale > 1 && (
-                <button
-                  onClick={() => setMobileZoom({ scale: 1, x: 0, y: 0 })}
-                  className="absolute top-4 right-4 bg-black/70 text-white px-4 py-2 rounded-full text-sm z-10"
-                >
-                  Reset Zoom
-                </button>
-              )}
             </div>
 
             {/* THUMBNAILS */}
-            <div className="flex gap-5 mt-8">
+            <div className="flex gap-4 mt-8">
               {gallery.map((img, i) => (
                 <button
                   key={i}
                   onClick={() => setIndex(i)}
-                  className={`relative w-20 h-24 border ${i === index ? 'border-black' : 'border-gray-200'
-                    }`}
+                  className={`relative w-20 h-24 border-2 transition-all duration-300 ${
+                    i === index 
+                      ? 'border-[#C9A961] shadow-md scale-105' 
+                      : 'border-gray-200 hover:border-[#E8DCC4]'
+                  }`}
                 >
                   <Image src={img} alt="" fill className="object-cover" />
                 </button>
               ))}
             </div>
+
+            {/* AUTHENTICITY BADGES */}
+            <div className="mt-10 p-6 bg-white rounded-sm shadow-luxury">
+              <div className="flex items-center gap-3 mb-4">
+                <span className="text-2xl">🏅</span>
+                <div>
+                  <p className="font-serif text-sm text-[#2C1810]">Silk Mark Certified</p>
+                  <p className="text-xs text-gray-500">100% Pure Kanchipuram Silk</p>
+                </div>
+              </div>
+              <div className="flex items-center gap-3">
+                <span className="text-2xl">🏭</span>
+                <div>
+                  <p className="font-serif text-sm text-[#2C1810]">Woven in Our Looms</p>
+                  <p className="text-xs text-gray-500">Direct from Manufacturer</p>
+                </div>
+              </div>
+            </div>
           </motion.div>
 
           {/* ================= CONTENT COLUMN ================= */}
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
-            <h1 className="font-serif text-4xl md:text-5xl tracking-[0.08em] leading-tight">
+            {/* Limited Edition Badge */}
+            <div className="inline-flex items-center gap-2 bg-[#2C1810] text-white px-4 py-2 text-xs tracking-widest mb-6">
+              <span>💎</span>
+              <span>LIMITED EDITION</span>
+            </div>
 
+            <h1 className="font-serif text-4xl md:text-5xl tracking-[0.04em] leading-tight text-[#2C1810]">
               {product.name}
             </h1>
 
-            <p className="mt-8 text-gray-500 max-w-sm leading-relaxed">{product.tagline}</p>
+            <p className="mt-6 text-[#8B7355] text-lg leading-relaxed">{product.tagline}</p>
 
             {product.originalPrice && product.discountedPrice ? (
-              <div className="mt-10 flex items-center gap-3">
-                <span className="text-lg text-gray-500 line-through">{product.originalPrice}</span>
-                <span className="text-2xl font-medium text-red-600">{product.discountedPrice}</span>
+              <div className="mt-8 flex items-baseline gap-4">
+                <span className="text-xl text-gray-400 line-through">{product.originalPrice}</span>
+                <span className="text-3xl font-serif text-[#C9A961]">{product.discountedPrice}</span>
               </div>
             ) : product.price && (
-              <p className="mt-10 text-2xl font-medium">{product.price}</p>
+              <p className="mt-8 text-3xl font-serif text-[#2C1810]">{product.price}</p>
             )}
 
             {product.description && (
@@ -287,33 +274,32 @@ Thank you.`
             )}
 
             {/* STOCK STATUS */}
-            <div className="mt-6">
-              <div className="flex items-center gap-2">
+            <div className="mt-8 p-5 bg-gradient-to-r from-amber-50 to-orange-50 border-l-4 border-[#C9A961]">
+              <div className="flex items-center gap-3 mb-2">
                 <div className="relative">
-                  <div className="w-5 h-5 bg-green-600 rounded-full flex items-center justify-center">
-                    <span className="text-white text-xs">✓</span>
-                  </div>
-                  <div className="absolute inset-0 w-5 h-5 bg-green-600 rounded-full animate-ping opacity-75"></div>
+                  <div className="w-3 h-3 bg-[#C9A961] rounded-full" />
+                  <div className="absolute inset-0 w-3 h-3 bg-[#C9A961] rounded-full animate-ping opacity-75" />
                 </div>
-                <p className="text-green-600 font-medium">In stock</p>
+                <p className="text-[#8B7355] font-medium tracking-wide">Exclusive Availability</p>
               </div>
-              <p className="text-sm text-amber-800 mt-1">Only <span className="text-red-600">1 item(s)</span> left in stock</p>
+              <p className="text-sm text-amber-900">Only <span className="font-serif text-[#C9A961]">1 piece</span> in stock — Reserve yours today</p>
             </div>
 
             {/* DETAILS */}
             {product.details && (
-              <div className="mt-14">
-                <div className="flex gap-8 border-b text-sm tracking-widest uppercase">
+              <div className="mt-12">
+                <div className="flex gap-8 border-b border-[#E8DCC4] text-xs tracking-[0.2em] uppercase">
                   {(['fabric', 'zari', 'border', 'care'] as const).map(
                     tab =>
                       product.details?.[tab] && (
                         <button
                           key={tab}
                           onClick={() => setActiveTab(tab)}
-                          className={`pb-3 ${activeTab === tab
-                              ? 'border-b-2 border-black'
-                              : 'text-gray-400 hover:text-black'
-                            }`}
+                          className={`pb-4 transition-all duration-300 ${
+                            activeTab === tab
+                              ? 'border-b-2 border-[#C9A961] text-[#2C1810]'
+                              : 'text-gray-400 hover:text-[#8B7355]'
+                          }`}
                         >
                           {tab}
                         </button>
@@ -333,21 +319,25 @@ Thank you.`
             )}
 
             {/* CTA */}
-            <div className="mt-20 flex flex-col gap-8">
-             <a
-  href={`https://wa.me/919944541985?text=${whatsappMessage}`}
-  target="_blank"
-  rel="noopener noreferrer"
-  className="bg-black text-white px-10 py-4 tracking-[0.25em] text-sm hover:bg-neutral-900 transition"
->
-  ORDER VIA WHATSAPP
-</a>
+            <div className="mt-16 space-y-5">
+              <a
+                href={`https://wa.me/919944541985?text=${whatsappMessage}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block text-center bg-[#2C1810] text-white px-12 py-5 tracking-[0.2em] text-sm hover:bg-[#C9A961] transition-all duration-300 shadow-luxury hover:shadow-luxury-hover transform hover:-translate-y-1"
+              >
+                ORDER VIA WHATSAPP
+              </a>
+              
+              <p className="text-center text-xs text-gray-500 italic">
+                Handcrafted exclusively for you • Ships within 2-3 days
+              </p>
 
               <Link
                 href="/products"
-                className="text-xs tracking-[0.3em] text-gray-500 hover:text-black transition"
+                className="block text-center text-xs tracking-[0.25em] text-[#8B7355] hover:text-[#2C1810] transition"
               >
-                ← BACK TO COLLECTIONS
+                ← EXPLORE MORE COLLECTIONS
               </Link>
             </div>
 
