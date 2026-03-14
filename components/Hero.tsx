@@ -85,7 +85,6 @@ export default function Hero() {
         className="relative z-10 flex h-full flex-col items-center justify-center text-center text-white px-6"
       >
         <div className="mb-4">
-          <div className="w-px h-16 bg-white/60 mx-auto mb-4" />
           <p className="text-xs tracking-[0.4em] text-white/90 uppercase">Handloom Heritage</p>
         </div>
         <h1 className="font-serif text-5xl md:text-7xl tracking-wide mb-6">

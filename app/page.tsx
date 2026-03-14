@@ -8,6 +8,8 @@ import Hero from '../components/Hero';
 import ProductCard from '../components/ProductCard';
 import BrandStorySlider from '../components/BrandStorySlider';
 import HeritageSection from '../components/HeritageSection';
+import GoogleReviews from '../components/GoogleReviews';
+import StoreLocation from '../components/StoreLocation';
 
 const featuredProducts = allProducts.filter(p => p.featured).slice(0, 4);
 const bestSellers = allProducts.slice(0, 8);
@@ -22,7 +24,7 @@ export default function HomePage() {
       <HeritageSection />
 
       {/* FEATURED COLLECTIONS */}
-      <section className="py-20 bg-background">
+      <section className="bg-background">
         <div className="max-w-7xl mx-auto px-6">
           <motion.div
             initial={{ opacity: 0 }}
@@ -115,28 +117,31 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* TESTIMONIALS */}
-      <section className="py-20 bg-white">
-        <div className="max-w-4xl mx-auto px-6 text-center">
+      {/* GOOGLE REVIEWS */}
+      <section className="py-12 bg-white">
+        <div className="max-w-6xl mx-auto px-6">
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
+            className="text-center mb-12"
           >
-            <div className="w-16 h-px bg-accent mx-auto mb-8" />
-            <p className="font-serif text-2xl md:text-3xl text-gray-900 italic mb-6">
-              "The quality and craftsmanship of these sarees are unmatched. 
-              A true celebration of our heritage."
-            </p>
-            <p className="text-sm tracking-widest text-gray-600">— PRIYA SHARMA</p>
-            <div className="w-16 h-px bg-accent mx-auto mt-8" />
+            <h2 className="font-serif text-4xl md:text-5xl text-gray-900 mb-4">
+              What Our Customers Say
+            </h2>
+            <div className="w-16 h-px bg-accent mx-auto" />
           </motion.div>
+
+          <GoogleReviews />
         </div>
       </section>
 
+      {/* STORE LOCATION */}
+      <StoreLocation />
+
       {/* WHATSAPP CTA */}
-      <section className="py-20 bg-primary text-white text-center">
+      <section className="py-12 bg-primary text-white text-center">
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}

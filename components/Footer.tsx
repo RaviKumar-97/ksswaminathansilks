@@ -5,17 +5,17 @@ import Link from 'next/link'
 export default function Footer() {
   return (
     <footer className="bg-primary text-white">
-      <div className="max-w-7xl mx-auto px-6 py-16">
+      <div className="max-w-7xl mx-auto px-6 pb-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
           
           <div className="md:col-span-2">
             <h3 className="font-serif text-2xl mb-4">Zari Ragam</h3>
             <p className="text-white/80 mb-6 leading-relaxed">
-              Authentic Kanchipuram silk sarees crafted with heritage, tradition, and timeless elegance for generations.
+              Manufacturers of authentic Kanchipuram silk sarees, crafted with tradition and heritage.
             </p>
             <div className="flex flex-col gap-2 text-sm text-white/70">
-              <p>123 Silk Street, Kanchipuram, Tamil Nadu 631502</p>
-              <p>+91 99445 41985</p>
+              {/* <p>123 Silk Street, Kanchipuram, Tamil Nadu 631502</p>
+              <p>+91 99445 41985</p> */}
               <p>info@zariragam.in</p>
             </div>
           </div>
@@ -30,7 +30,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          <div>
+          {/* <div>
             <h4 className="font-serif text-lg mb-4">Legal</h4>
             <ul className="space-y-3 text-sm">
               <li><Link href="/privacy-policy" className="text-white/80 hover:text-white transition">Privacy Policy</Link></li>
@@ -38,7 +38,7 @@ export default function Footer() {
               <li><Link href="/return-policy" className="text-white/80 hover:text-white transition">Return Policy</Link></li>
               <li><Link href="/shipping-policy" className="text-white/80 hover:text-white transition">Shipping Policy</Link></li>
             </ul>
-          </div>
+          </div> */}
         </div>
 
         <div className="border-t border-white/20 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-white/70">

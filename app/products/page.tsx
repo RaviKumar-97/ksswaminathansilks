@@ -41,7 +41,7 @@ export default function ProductsPage() {
         />
       </div>
 
-      <section className="py-20 bg-background">
+      <section className="py-6 bg-background">
         <div className="max-w-7xl mx-auto px-6">
           <motion.div
             initial={{ opacity: 0 }}

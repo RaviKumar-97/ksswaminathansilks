@@ -13,7 +13,7 @@ export default function Header() {
 
         <button
           onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className="md:hidden absolute left-6 flex flex-col gap-1 p-2"
+          className="md:hidden absolute right-6 flex flex-col gap-1 p-2"
         >
           <span className="w-6 h-0.5 bg-black"></span>
           <span className="w-6 h-0.5 bg-black"></span>
@@ -33,26 +33,36 @@ export default function Header() {
 
       </div>
 
-      <div className={`md:hidden fixed top-0 right-0 h-full w-64 bg-white shadow-lg transform transition-transform duration-300 z-50 ${
-        isMenuOpen ? 'translate-x-0' : 'translate-x-full'
-      }`}>
-        <div className="p-6">
+      <div
+        className={`md:hidden fixed top-0 right-0 h-full w-72 bg-[#ffffff] shadow-lg 
+  transform transition-transform duration-300 z-50 
+  rounded-l-[80px] 
+  ${isMenuOpen ? "translate-x-0" : "translate-x-full"}`}
+      >
+        {/* Inner Border Container */}
+        <div className="min-h-[95%] m-3 border border-[#c8a995] rounded-l-[70px] relative p-6">
+
           <button
             onClick={() => setIsMenuOpen(false)}
             className="absolute top-4 right-4 text-2xl"
           >
             ×
           </button>
-          <div className="mt-8 mb-8">
-            <Link href="/" className="font-serif text-2xl text-primary" onClick={() => setIsMenuOpen(false)}>
+
+          <div className="mt-10 mb-8">
+            <Link
+              href="/"
+              className="font-serif text-2xl text-primary"
+              onClick={() => setIsMenuOpen(false)}
+            >
               Zari Ragam
             </Link>
           </div>
-          <nav className="flex flex-col gap-6 text-sm tracking-wider">
-            <Link href="/" className="hover:text-primary transition-colors" onClick={() => setIsMenuOpen(false)}>Home</Link>
-            <Link href="/products" className="hover:text-primary transition-colors" onClick={() => setIsMenuOpen(false)}>Collection</Link>
-            <Link href="/about" className="hover:text-primary transition-colors" onClick={() => setIsMenuOpen(false)}>Our Heritage</Link>
-            <Link href="/contact" className="hover:text-primary transition-colors" onClick={() => setIsMenuOpen(false)}>Contact</Link>
+          <nav className="flex flex-col divide-y text-sm tracking-wider">
+            <Link href="/" className="py-4 hover:text-primary" onClick={() => setIsMenuOpen(false)}>Home</Link>
+            <Link href="/products" className="py-4 hover:text-primary" onClick={() => setIsMenuOpen(false)}>Collection</Link>
+            <Link href="/about" className="py-4 hover:text-primary" onClick={() => setIsMenuOpen(false)}>Our Heritage</Link>
+            <Link href="/contact" className="py-4 hover:text-primary" onClick={() => setIsMenuOpen(false)}>Contact</Link>
           </nav>
         </div>
       </div>
