@@ -39,7 +39,4 @@ body {
   box-shadow: 0 20px 60px rgba(44, 24, 16, 0.12);
 }
 
-/* Smooth Transitions */
-* {
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-}
+

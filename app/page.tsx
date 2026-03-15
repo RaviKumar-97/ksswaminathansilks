@@ -1,8 +1,4 @@
-'use client';
-
-import Image from 'next/image';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
 import { allProducts } from '../src/data/products';
 import Hero from '../components/Hero';
 import ProductCard from '../components/ProductCard';
@@ -26,18 +22,12 @@ export default function HomePage() {
       {/* FEATURED COLLECTIONS */}
       <section className="bg-background">
         <div className="max-w-7xl mx-auto p-6">
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
+          <div className="text-center mb-16">
             <h2 className="font-serif text-4xl md:text-5xl text-gray-900 mb-4">
               Featured Collections
             </h2>
             <div className="w-16 h-px bg-accent mx-auto" />
-          </motion.div>
+          </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {featuredProducts.map((product) => (
@@ -51,12 +41,7 @@ export default function HomePage() {
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-6">
           <div className="grid md:grid-cols-2 gap-16 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-            >
+            <div>
               <h2 className="font-serif text-4xl md:text-5xl text-gray-900 mb-6">
                 A Legacy Woven in Silk
               </h2>
@@ -70,16 +55,11 @@ export default function HomePage() {
                 For generations, we have preserved the art of handloom silk, 
                 bringing you sarees that embody grace, purity, and cultural richness.
               </p>
-            </motion.div>
+            </div>
 
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-            >
+            <div>
               <BrandStorySlider />
-            </motion.div>
+            </div>
           </div>
         </div>
       </section>
@@ -87,18 +67,12 @@ export default function HomePage() {
       {/* BEST SELLERS */}
       <section className="py-20 bg-background">
         <div className="max-w-7xl mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
+          <div className="text-center mb-16">
             <h2 className="font-serif text-4xl md:text-5xl text-gray-900 mb-4">
               Best Sellers
             </h2>
             <div className="w-16 h-px bg-accent mx-auto" />
-          </motion.div>
+          </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {bestSellers.map((product) => (
@@ -109,7 +83,7 @@ export default function HomePage() {
           <div className="text-center mt-12">
             <Link
               href="/products"
-              className="inline-block border border-primary text-primary px-10 py-3 text-sm tracking-widest rounded-full shadow-md   hover:bg-primary hover:text-white transition-colors duration-300"
+              className="inline-block border border-primary text-primary px-10 py-3 text-sm tracking-widest rounded-full shadow-md hover:bg-primary hover:text-white transition-colors duration-300"
             >
               VIEW ALL PRODUCTS
             </Link>
@@ -120,48 +94,35 @@ export default function HomePage() {
       {/* PRE-ORDER BANNER */}
       <section className="py-14 bg-[#2C1810] text-white">
         <div className="max-w-5xl mx-auto px-6 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
+          <p className="text-xs tracking-[0.3em] text-amber-400 mb-3">DIRECT FROM OUR LOOMS</p>
+          <h2 className="font-serif text-3xl md:text-4xl mb-4">
+            We Are the Manufacturers
+          </h2>
+          <p className="text-white/80 max-w-2xl mx-auto mb-8 leading-relaxed">
+            Every saree is handwoven by our master weavers. 
+            Can't find your colour or design? Place a <span className="text-amber-400 font-medium">Pre-Order</span> and 
+            we'll weave it exclusively for you — delivered in 15–20 days.
+          </p>
+          <a
+            href="https://wa.me/919944541985?text=Hi%2C%20I%20would%20like%20to%20place%20a%20pre-order%20for%20a%20custom%20saree."
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-block border border-amber-400 text-amber-400 px-10 py-3 text-sm tracking-widest hover:bg-amber-400 hover:text-[#2C1810] transition-all duration-300"
           >
-            <p className="text-xs tracking-[0.3em] text-amber-400 mb-3">DIRECT FROM OUR LOOMS</p>
-            <h2 className="font-serif text-3xl md:text-4xl mb-4">
-              We Are the Manufacturers
-            </h2>
-            <p className="text-white/80 max-w-2xl mx-auto mb-8 leading-relaxed">
-              Every saree is handwoven by our master weavers. 
-              Can't find your colour or design? Place a <span className="text-amber-400 font-medium">Pre-Order</span> and 
-              we'll weave it exclusively for you — delivered in 15–20 days.
-            </p>
-            <a
-              href="https://wa.me/919944541985?text=Hi%2C%20I%20would%20like%20to%20place%20a%20pre-order%20for%20a%20custom%20saree."
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block border border-amber-400 text-amber-400 px-10 py-3 text-sm tracking-widest hover:bg-amber-400 hover:text-[#2C1810] transition-all duration-300"
-            >
-              PLACE A PRE-ORDER
-            </a>
-          </motion.div>
+            PLACE A PRE-ORDER
+          </a>
         </div>
       </section>
 
       {/* GOOGLE REVIEWS */}
       <section className="py-12 bg-white">
         <div className="max-w-6xl mx-auto px-6">
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
+          <div className="text-center mb-12">
             <h2 className="font-serif text-4xl md:text-5xl text-gray-900 mb-4">
               What Our Customers Say
             </h2>
             <div className="w-16 h-px bg-accent mx-auto" />
-          </motion.div>
+          </div>
 
           <GoogleReviews />
         </div>
@@ -172,13 +133,7 @@ export default function HomePage() {
 
       {/* WHATSAPP CTA */}
       <section className="py-12 bg-primary text-white text-center">
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          transition={{ duration: 0.6 }}
-          viewport={{ once: true }}
-          className="max-w-3xl mx-auto px-6"
-        >
+        <div className="max-w-3xl mx-auto px-6">
           <h2 className="font-serif text-3xl md:text-4xl mb-4">
             Personalized Assistance
           </h2>
@@ -192,7 +147,7 @@ export default function HomePage() {
           >
             CHAT ON WHATSAPP
           </a>
-        </motion.div>
+        </div>
       </section>
     </>
   );
