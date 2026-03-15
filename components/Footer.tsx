@@ -14,8 +14,6 @@ export default function Footer() {
               Manufacturers of original Kanchipuram silk sarees, crafted with tradition and heritage.
             </p>
             <div className="flex flex-col gap-2 text-sm text-white/70">
-              {/* <p>123 Silk Street, Kanchipuram, Tamil Nadu 631502</p>
-              <p>+91 99445 41985</p> */}
               <p>info@zariragam.in</p>
             </div>
           </div>
