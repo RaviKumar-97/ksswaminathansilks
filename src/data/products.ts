@@ -2,13 +2,15 @@ export interface Product {
   slug: string
   name: string
   tagline: string
-  image: string;        // main image (used in grids)
-  images?: string[];    // 👈 gallery images
+  image: string;
+  images?: string[];
   price?: string
   originalPrice?: string
   discountedPrice?: string
   description?: string
   featured?: boolean
+  preOrder?: boolean
+  deliveryDays?: string
 
   
   details?: {

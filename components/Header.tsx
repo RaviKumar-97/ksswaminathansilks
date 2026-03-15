@@ -3,12 +3,22 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
+import { usePathname } from 'next/navigation'
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const pathname = usePathname()
+
+  const isActive = (path: string) => {
+    if (path === '/') {
+      return pathname === '/'
+    }
+    return pathname.startsWith(path)
+  }
 
   return (
     <header className="sticky top-0 border-b border-gray-200 bg-white z-40">
+      {/* Logo Section */}
       <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-center relative">
 
         <button
@@ -23,16 +33,45 @@ export default function Header() {
         <Link href="/" className="font-serif text-2xl md:text-3xl text-primary tracking-wide">
           Zari Ragam
         </Link>
-
-        <nav className="hidden md:flex items-center gap-10 text-sm tracking-wider absolute right-6">
-          <Link href="/" className="hover:text-primary transition-colors">Home</Link>
-          <Link href="/products" className="hover:text-primary transition-colors">Collection</Link>
-          <Link href="/about" className="hover:text-primary transition-colors">Our Heritage</Link>
-          <Link href="/contact" className="hover:text-primary transition-colors">Contact</Link>
-        </nav>
-
       </div>
 
+      {/* Desktop Navigation - Below Logo */}
+      <nav className="hidden md:flex items-center justify-center gap-10 text-sm tracking-wider py-3 border-t border-gray-100">
+        <Link 
+          href="/" 
+          className={`hover:text-primary transition-colors pb-1 ${
+            isActive('/') ? 'text-primary border-b-2 border-primary font-medium' : ''
+          }`}
+        >
+          Home
+        </Link>
+        <Link 
+          href="/products" 
+          className={`hover:text-primary transition-colors pb-1 ${
+            isActive('/products') ? 'text-primary border-b-2 border-primary font-medium' : ''
+          }`}
+        >
+          Collection
+        </Link>
+        <Link 
+          href="/about" 
+          className={`hover:text-primary transition-colors pb-1 ${
+            isActive('/about') ? 'text-primary border-b-2 border-primary font-medium' : ''
+          }`}
+        >
+          Our Heritage
+        </Link>
+        <Link 
+          href="/contact" 
+          className={`hover:text-primary transition-colors pb-1 ${
+            isActive('/contact') ? 'text-primary border-b-2 border-primary font-medium' : ''
+          }`}
+        >
+          Contact
+        </Link>
+      </nav>
+
+      {/* Mobile Menu */}
       <div
         className={`md:hidden fixed top-0 right-0 h-full w-72 bg-[#ffffff] shadow-lg 
   transform transition-transform duration-300 z-50 
@@ -59,10 +98,42 @@ export default function Header() {
             </Link>
           </div>
           <nav className="flex flex-col divide-y text-sm tracking-wider">
-            <Link href="/" className="py-4 hover:text-primary" onClick={() => setIsMenuOpen(false)}>Home</Link>
-            <Link href="/products" className="py-4 hover:text-primary" onClick={() => setIsMenuOpen(false)}>Collection</Link>
-            <Link href="/about" className="py-4 hover:text-primary" onClick={() => setIsMenuOpen(false)}>Our Heritage</Link>
-            <Link href="/contact" className="py-4 hover:text-primary" onClick={() => setIsMenuOpen(false)}>Contact</Link>
+            <Link 
+              href="/" 
+              className={`py-4 hover:text-primary ${
+                isActive('/') ? 'text-primary font-medium' : ''
+              }`} 
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Home
+            </Link>
+            <Link 
+              href="/products" 
+              className={`py-4 hover:text-primary ${
+                isActive('/products') ? 'text-primary font-medium' : ''
+              }`} 
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Collection
+            </Link>
+            <Link 
+              href="/about" 
+              className={`py-4 hover:text-primary ${
+                isActive('/about') ? 'text-primary font-medium' : ''
+              }`} 
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Our Heritage
+            </Link>
+            <Link 
+              href="/contact" 
+              className={`py-4 hover:text-primary ${
+                isActive('/contact') ? 'text-primary font-medium' : ''
+              }`} 
+              onClick={() => setIsMenuOpen(false)}
+            >
+              Contact
+            </Link>
           </nav>
         </div>
       </div>
@@ -74,6 +145,7 @@ export default function Header() {
           onClick={() => setIsMenuOpen(false)}
         ></div>
       )}
+
     </header>
   )
 }

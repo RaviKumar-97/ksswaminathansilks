@@ -91,11 +91,11 @@ export default function Hero() {
           Timeless Elegance
         </h1>
         <p className="text-lg md:text-xl max-w-2xl mb-10 font-light leading-relaxed">
-          Pure Kanchipuram silk sarees woven in our own looms
+          Pure Kanchipuram silk sarees manufactured in our own looms.
         </p>
         <Link
           href="/products"
-          className="bg-white text-[#2C1810] px-12 py-5 text-sm tracking-[0.2em] hover:bg-[#C9A961] hover:text-white transition-all duration-300 shadow-luxury"
+          className="bg-white   text-[#2C1810] border border-[#886d2f] px-12 py-5 text-sm tracking-[0.2em] rounded-full hover:bg-[#C9A961] hover:text-white transition-all duration-300 shadow-luxury"
         >
           EXPLORE COLLECTION
         </Link>

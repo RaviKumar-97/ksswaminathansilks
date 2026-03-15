@@ -230,8 +230,8 @@ Thank you.`
               <div className="flex items-center gap-3 mb-4">
                 <span className="text-2xl">🏅</span>
                 <div>
-                  <p className="font-serif text-sm text-[#2C1810]">Silk Mark Certified</p>
-                  <p className="text-xs text-gray-500">100% Pure Kanchipuram Silk</p>
+                  <p className="font-serif text-sm text-[#2C1810]">Original Handloom saree </p>
+                  <p className="text-xs text-gray-500">100% pure Kanchipuram Silk</p>
                 </div>
               </div>
               <div className="flex items-center gap-3">
@@ -329,9 +329,9 @@ Thank you.`
                 ORDER VIA WHATSAPP
               </a>
               
-              <p className="text-center text-xs text-gray-500 italic">
+              {/* <p className="text-center text-xs text-gray-500 italic">
                 Handcrafted exclusively for you • Ships within 2-3 days
-              </p>
+              </p> */}
 
               <Link
                 href="/products"
@@ -356,7 +356,8 @@ Thank you.`
           >
             <button
               onClick={() => setIsOpen(false)}
-              className="absolute top-6 right-6 text-white text-3xl"
+              className="absolute top-4 right-4 md:top-6 md:right-6 bg-white hover:bg-white/20 backdrop-blur-sm w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center text-black text-2xl md:text-3xl transition-all z-50 active:scale-95"
+              aria-label="Close fullscreen"
             >
               ✕
             </button>
@@ -364,7 +365,7 @@ Thank you.`
             {index > 0 && (
               <button
                 onClick={() => setIndex(index - 1)}
-                className="absolute left-6 text-white text-5xl"
+                className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-sm w-10 h-10 rounded-full flex items-center justify-center text-white text-3xl hover:bg-white/30 transition z-50 active:scale-95"
               >
                 ‹
               </button>
@@ -373,7 +374,7 @@ Thank you.`
             {index < gallery.length - 1 && (
               <button
                 onClick={() => setIndex(index + 1)}
-                className="absolute right-6 text-white text-5xl"
+                className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-sm w-10 h-10 rounded-full flex items-center justify-center text-white text-3xl hover:bg-white/30 transition z-50 active:scale-95"
               >
                 ›
               </button>

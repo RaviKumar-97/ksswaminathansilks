@@ -9,7 +9,7 @@ type BreadcrumbItem = {
 
 export default function Breadcrumb({ items }: { items: BreadcrumbItem[] }) {
   return (
-    <nav className="text-sm mb-10 text-gray-500">
+    <nav className="text-sm text-gray-500">
       <ol className="flex flex-wrap gap-2">
         {items.map((item, index) => (
           <li key={index} className="flex items-center gap-2">

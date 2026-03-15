@@ -5,13 +5,13 @@ import Link from 'next/link'
 export default function Footer() {
   return (
     <footer className="bg-primary text-white">
-      <div className="max-w-7xl mx-auto px-6 pb-12">
+      <div className="max-w-7xl mx-auto px-6 py-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
           
           <div className="md:col-span-2">
             <h3 className="font-serif text-2xl mb-4">Zari Ragam</h3>
             <p className="text-white/80 mb-6 leading-relaxed">
-              Manufacturers of authentic Kanchipuram silk sarees, crafted with tradition and heritage.
+              Manufacturers of original Kanchipuram silk sarees, crafted with tradition and heritage.
             </p>
             <div className="flex flex-col gap-2 text-sm text-white/70">
               {/* <p>123 Silk Street, Kanchipuram, Tamil Nadu 631502</p>

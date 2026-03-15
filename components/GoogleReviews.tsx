@@ -117,12 +117,12 @@ export default function GoogleReviews() {
             <p className="text-sm text-gray-600 mt-1">Based on {reviews.length} Google Reviews</p>
           </div>
         </div>
-        <a
-          href="https://www.google.com/maps/place/K.S.Swaminathan+Silks/@12.4990244,79.2497421,17z"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 text-sm text-primary hover:underline"
-        >
+            <a
+              href="https://www.google.com/maps/place/K.S.Swaminathan+Silks/@12.4990244,79.2497421,17z/data=!4m8!3m7!1s0x3bacd6d49662c95b:0x71c50764ae91776e!8m2!3d12.4990244!4d79.249742!9m1!1b1!16s%2Fg%2F11c1z8y8qy"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-sm text-[#C9A961] hover:text-[#2C1810] transition-colors"
+            >
           <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
           </svg>

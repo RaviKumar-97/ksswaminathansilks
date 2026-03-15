@@ -119,7 +119,7 @@ export default function ProductsPage() {
           <a
             href="https://wa.me/919944541985"
             target="_blank"
-            className="inline-block bg-white text-primary px-10 py-4 text-sm tracking-widest hover:bg-accent hover:text-white transition-colors duration-300"
+            className="inline-block rounded-full bg-white text-primary px-10 py-4 text-sm tracking-widest hover:bg-accent hover:text-white transition-colors duration-300"
           >
             CHAT ON WHATSAPP
           </a>
