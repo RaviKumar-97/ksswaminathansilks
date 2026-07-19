@@ -6,7 +6,7 @@ import { motion } from 'framer-motion';
 import Breadcrumb from '../../components/Breadcrumb';
 import ProductCard from '../../components/ProductCard';
 import { allProducts } from '../../src/data/products';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 export default function ProductsPage() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -19,20 +19,22 @@ export default function ProductsPage() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
+  const topRef = useRef<HTMLDivElement>(null);
+
   const productsPerPage = isMobile ? 8 : 9;
   const totalPages = Math.ceil(allProducts.length / productsPerPage);
   
   const startIndex = (currentPage - 1) * productsPerPage;
   const currentProducts = allProducts.slice(startIndex, startIndex + productsPerPage);
 
-  const handlePageChange = (page) => {
+  const handlePageChange = (page: number) => {
     setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(() => topRef.current?.scrollIntoView({ behavior: 'smooth' }), 10);
   };
 
   return (
     <>
-      <div className="max-w-7xl mx-auto px-6 mt-6">
+      <div ref={topRef} className="max-w-7xl mx-auto px-6 mt-6">
         <Breadcrumb
           items={[
             { label: 'Home', href: '/' },

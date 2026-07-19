@@ -19,6 +19,61 @@ export default function ProductClient({ product }: { product: Product }) {
   const [touchStartX, setTouchStartX] = useState<number | null>(null);
   const [isMobile, setIsMobile] = useState(false);
   const [isClient, setIsClient] = useState(false);
+  const lastTapRef = useRef<number>(0);
+  const [fsSwipeStartX, setFsSwipeStartX] = useState<number | null>(null);
+
+  /* ---------- PINCH TO ZOOM ---------- */
+  const [pinchScale, setPinchScale] = useState(1);
+  const [pinchOrigin, setPinchOrigin] = useState({ x: 50, y: 50 });
+  const pinchStartDistRef = useRef<number | null>(null);
+  const pinchStartScaleRef = useRef(1);
+  const fsImageRef = useRef<HTMLDivElement>(null);
+
+  const getPinchDist = (touches: React.TouchList) =>
+    Math.hypot(
+      touches[0].clientX - touches[1].clientX,
+      touches[0].clientY - touches[1].clientY
+    );
+
+  const handleFsTouchStart = (e: React.TouchEvent) => {
+    if (e.touches.length === 2) {
+      pinchStartDistRef.current = getPinchDist(e.touches);
+      pinchStartScaleRef.current = pinchScale;
+    } else {
+      setFsSwipeStartX(e.touches[0].clientX);
+    }
+  };
+
+  const handleFsTouchMove = (e: React.TouchEvent) => {
+    if (e.touches.length === 2 && pinchStartDistRef.current !== null) {
+      const rect = fsImageRef.current?.getBoundingClientRect();
+      const newScale = Math.min(4, Math.max(1,
+        pinchStartScaleRef.current * (getPinchDist(e.touches) / pinchStartDistRef.current)
+      ));
+      setPinchScale(newScale);
+      if (rect) {
+        const midX = (e.touches[0].clientX + e.touches[1].clientX) / 2;
+        const midY = (e.touches[0].clientY + e.touches[1].clientY) / 2;
+        setPinchOrigin({
+          x: ((midX - rect.left) / rect.width) * 100,
+          y: ((midY - rect.top) / rect.height) * 100,
+        });
+      }
+    }
+  };
+
+  const handleFsTouchEnd = (e: React.TouchEvent) => {
+    pinchStartDistRef.current = null;
+    if (pinchScale <= 1.05) {
+      setPinchScale(1);
+      if (fsSwipeStartX !== null && e.changedTouches.length > 0) {
+        const diff = fsSwipeStartX - e.changedTouches[0].clientX;
+        if (diff > 50 && index < gallery.length - 1) setIndex(i => i + 1);
+        if (diff < -50 && index > 0) setIndex(i => i - 1);
+      }
+    }
+    setFsSwipeStartX(null);
+  };
 
   const [relatedIndex, setRelatedIndex] = useState(() => {
     // Start at a position that shows clean 4-product groups on desktop
@@ -68,7 +123,6 @@ I am interested in the following saree:
 
 • Name: ${product.name}
 ${product.price ? `• Price: ${product.price}` : ''}
-${product.tagline ? `• Category: ${product.tagline}` : ''}
 
 Product Link:
 ${window.location.href}
@@ -78,7 +132,7 @@ Kindly share availability, blouse details, and delivery timeline.
 Thank you.`
     );
     setWhatsappMessage(message);
-  }, [product.name, product.price, product.tagline]);
+  }, [product.name, product.price]);
 
   const nextRelated = () => {
     setRelatedIndex(prev => prev + 1);
@@ -140,13 +194,20 @@ Thank you.`
               ref={containerRef}
               onMouseMove={handleMouseMove}
               onMouseLeave={() => setZoom(z => ({ ...z, show: false }))}
-              onClick={() => setIsOpen(true)}
+              onClick={() => { if (!isMobile) setIsOpen(true); }}
               onTouchStart={e => setTouchStartX(e.touches[0].clientX)}
               onTouchEnd={e => {
                 if (touchStartX === null) return;
                 const diff = touchStartX - e.changedTouches[0].clientX;
-                if (diff > 50 && index < gallery.length - 1) setIndex(index + 1);
-                if (diff < -50 && index > 0) setIndex(index - 1);
+                if (Math.abs(diff) > 50) {
+                  if (diff > 50 && index < gallery.length - 1) setIndex(index + 1);
+                  if (diff < -50 && index > 0) setIndex(index - 1);
+                } else {
+                  // double tap detection
+                  const now = Date.now();
+                  if (now - lastTapRef.current < 300) setIsOpen(true);
+                  lastTapRef.current = now;
+                }
                 setTouchStartX(null);
               }}
               className="relative aspect-[3/4] bg-[#faf7f2] overflow-hidden cursor-zoom-in shadow-luxury hover:shadow-luxury-hover transition-shadow duration-500"
@@ -184,11 +245,8 @@ Thank you.`
 
               {index > 0 && (
                 <button
-                  onClick={e => {
-                    e.stopPropagation();
-                    setIndex(index - 1);
-                  }}
-              className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 w-12 h-12 rounded-full flex items-center justify-center text-2xl hover:bg-white shadow-lg z-10"
+                  onClick={e => { e.stopPropagation(); setIndex(index - 1); }}
+              className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 w-[32px] h-[32px] rounded-full flex items-center justify-center text-2xl hover:bg-white shadow-lg z-10"
                 >
                   ‹
                 </button>
@@ -196,11 +254,8 @@ Thank you.`
 
               {index < gallery.length - 1 && (
                 <button
-                  onClick={e => {
-                    e.stopPropagation();
-                    setIndex(index + 1);
-                  }}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 w-12 h-12 rounded-full flex items-center justify-center text-2xl hover:bg-white shadow-lg z-10"
+                  onClick={e => { e.stopPropagation(); setIndex(index + 1); }}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 w-[32px] h-[32px] rounded-full flex items-center justify-center text-2xl hover:bg-white shadow-lg z-10"
 
                 >
                   ›
@@ -224,6 +279,9 @@ Thank you.`
                 </button>
               ))}
             </div>
+            {isMobile && (
+              <p className="mt-3 text-center text-xs text-gray-400 tracking-wide">Double tap image to view fullscreen • Swipe to browse</p>
+            )}
 
             {/* AUTHENTICITY BADGES */}
             <div className="mt-10 p-6 bg-white rounded-sm shadow-luxury">
@@ -256,7 +314,6 @@ Thank you.`
               {product.name}
             </h1>
 
-            <p className="mt-6 text-[#8B7355] text-lg leading-relaxed">{product.tagline}</p>
 
             {product.originalPrice && product.discountedPrice ? (
               <div className="mt-8 flex items-baseline gap-4">
@@ -274,15 +331,23 @@ Thank you.`
             )}
 
             {/* STOCK STATUS */}
-            <div className="mt-8 p-5 bg-gradient-to-r from-amber-50 to-orange-50 border-l-4 border-[#C9A961]">
+            <div className={`mt-8 p-5 border-l-4 ${product.inStock === false ? 'bg-gray-50 border-gray-400' : 'bg-gradient-to-r from-amber-50 to-orange-50 border-[#C9A961]'}`}>
               <div className="flex items-center gap-3 mb-2">
                 <div className="relative">
-                  <div className="w-3 h-3 bg-[#C9A961] rounded-full" />
-                  <div className="absolute inset-0 w-3 h-3 bg-[#C9A961] rounded-full animate-ping opacity-75" />
+                  <div className={`w-3 h-3 rounded-full ${product.inStock === false ? 'bg-gray-400' : 'bg-[#C9A961]'}`} />
+                  {product.inStock !== false && (
+                    <div className="absolute inset-0 w-3 h-3 bg-[#C9A961] rounded-full animate-ping opacity-75" />
+                  )}
                 </div>
-                <p className="text-[#8B7355] font-medium tracking-wide">Exclusive Availability</p>
+                <p className={`font-medium tracking-wide ${product.inStock === false ? 'text-gray-500' : 'text-[#8B7355]'}`}>
+                  {product.inStock === false ? 'Currently Unavailable' : 'Exclusive Availability'}
+                </p>
               </div>
-              <p className="text-sm text-amber-900">Only <span className="font-serif text-[#C9A961]">1 piece</span> in stock — Reserve yours today</p>
+              {product.inStock === false ? (
+                <p className="text-sm text-gray-500">This saree is <span className="font-serif">out of stock</span> — Contact us to be notified</p>
+              ) : (
+                <p className="text-sm text-amber-900">Only <span className="font-serif text-[#C9A961]">{product.stock ?? 1} {product.stock === 1 ? 'piece' : 'pieces'}</span> in stock — Reserve yours today</p>
+              )}
             </div>
 
             {/* DETAILS */}
@@ -320,14 +385,25 @@ Thank you.`
 
             {/* CTA */}
             <div className="mt-16 space-y-5">
-              <a
-                href={`https://wa.me/919944541985?text=${whatsappMessage}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="block text-center bg-[#2C1810] text-white px-12 py-5 tracking-[0.2em] text-sm hover:bg-[#C9A961] transition-all duration-300 shadow-luxury hover:shadow-luxury-hover transform hover:-translate-y-1"
-              >
-                ORDER VIA WHATSAPP
-              </a>
+              {product.inStock === false ? (
+                <a
+                  href={`https://wa.me/919944541985?text=${encodeURIComponent(`Hello,\n\nI am interested in the following saree and would like to be notified when it is back in stock:\n\n• Name: ${product.name}\n\nProduct Link:\n${typeof window !== 'undefined' ? window.location.href : ''}\n\nThank you.`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block text-center bg-gray-700 text-white px-12 py-5 tracking-[0.2em] text-sm hover:bg-[#25D366] transition-all duration-300 shadow-luxury transform hover:-translate-y-1"
+                >
+                  NOTIFY ME WHEN AVAILABLE
+                </a>
+              ) : (
+                <a
+                  href={`https://wa.me/919944541985?text=${whatsappMessage}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block text-center bg-[#2C1810] text-white px-12 py-5 tracking-[0.2em] text-sm hover:bg-[#C9A961] transition-all duration-300 shadow-luxury hover:shadow-luxury-hover transform hover:-translate-y-1"
+                >
+                  ORDER VIA WHATSAPP
+                </a>
+              )}
               
               {/* <p className="text-center text-xs text-gray-500 italic">
                 Handcrafted exclusively for you • Ships within 2-3 days
@@ -353,6 +429,9 @@ Thank you.`
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center"
+            onTouchStart={handleFsTouchStart}
+            onTouchMove={handleFsTouchMove}
+            onTouchEnd={handleFsTouchEnd}
           >
             <button
               onClick={() => setIsOpen(false)}
@@ -364,8 +443,8 @@ Thank you.`
 
             {index > 0 && (
               <button
-                onClick={() => setIndex(index - 1)}
-                className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-sm w-10 h-10 rounded-full flex items-center justify-center text-white text-3xl hover:bg-white/30 transition z-50 active:scale-95"
+                onClick={() => { setIndex(index - 1); setPinchScale(1); }}
+                className="absolute left-3 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-sm w-[32px] h-[32px] rounded-full flex items-center justify-center text-black text-3xl hover:bg-white/30 transition z-50 active:scale-95"
               >
                 ‹
               </button>
@@ -373,20 +452,44 @@ Thank you.`
 
             {index < gallery.length - 1 && (
               <button
-                onClick={() => setIndex(index + 1)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-sm w-10 h-10 rounded-full flex items-center justify-center text-white text-3xl hover:bg-white/30 transition z-50 active:scale-95"
+                onClick={() => { setIndex(index + 1); setPinchScale(1); }}
+                className="absolute right-3 top-1/2 -translate-y-1/2 bg-white/20 backdrop-blur-sm w-[32px] h-[32px] rounded-full flex items-center justify-center text-black text-3xl hover:bg-white/30 transition z-50 active:scale-95"
               >
                 ›
               </button>
             )}
 
-            <div className="relative w-[90vw] h-[85vh]">
-              <Image
-                src={gallery[index]}
-                alt={product.name}
-                fill
-                className="object-contain"
-              />
+            {/* PINCH-ZOOMABLE IMAGE */}
+            <div ref={fsImageRef} className="relative w-[90vw] h-[85vh] overflow-hidden">
+              <div
+                style={{
+                  transform: `scale(${pinchScale})`,
+                  transformOrigin: `${pinchOrigin.x}% ${pinchOrigin.y}%`,
+                  transition: pinchScale === 1 ? 'transform 0.2s ease' : 'none',
+                  width: '100%',
+                  height: '100%',
+                }}
+              >
+                <Image
+                  src={gallery[index]}
+                  alt={product.name}
+                  fill
+                  className="object-contain"
+                />
+              </div>
+            </div>
+
+            {/* DOT INDICATORS */}
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-50">
+              {gallery.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => { setIndex(i); setPinchScale(1); }}
+                  className={`rounded-full transition-all duration-300 ${
+                    i === index ? 'w-6 h-2 bg-white' : 'w-2 h-2 bg-white/40'
+                  }`}
+                />
+              ))}
             </div>
           </motion.div>
         )}
@@ -425,7 +528,7 @@ Thank you.`
                       />
                     </div>
                     <h3 className="font-serif text-base md:text-lg">{rp.name}</h3>
-                    <p className="text-gray-600 text-xs md:text-sm">{rp.tagline}</p>
+                    
                     {rp.originalPrice && rp.discountedPrice ? (
                       <div className="mt-2 flex items-center gap-2">
                         <span className="text-xs md:text-sm text-gray-400 line-through">{rp.originalPrice}</span>
