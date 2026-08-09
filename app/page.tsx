@@ -10,6 +10,11 @@ import StoreLocation from '../components/StoreLocation';
 const featuredProducts = allProducts.filter(p => p.featured).slice(0, 4);
 const bestSellers = allProducts.slice(0, 8);
 
+export const metadata = {
+  title: 'Premium Kanchipuram Handloom Silk Sarees',
+  description:
+    'Explore authentic Kanchipuram handloom silk sarees, bridal silk sarees, pure silk sarees, and customized silk sarees from ZARIRAGAM.',
+};
 export default function HomePage() {
   return (
     <>
@@ -43,11 +48,11 @@ export default function HomePage() {
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div>
               <h2 className="font-serif text-4xl md:text-5xl text-gray-900 mb-6">
-                A Legacy Woven in Silk
+                Authentic Kanchipuram Handloom Silk Sarees
               </h2>
               <div className="w-16 h-px bg-accent mb-6" />
               <p className="text-gray-600 leading-relaxed mb-4">
-                At Zari Ragam, every saree tells a story of heritage, 
+                At ZariRagam, every saree tells a story of heritage, 
                 craftsmanship, and timeless elegance. Rooted in tradition and guided 
                 by excellence, our collection reflects the soul of Kanchipuram weaving.
               </p>

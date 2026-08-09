@@ -19,71 +19,55 @@ const inter = Inter({
 
 export const metadata = {
   title: {
-    default: 'Zari Ragam | Premium Kanchipuram Silk Sarees Online',
-    template: '%s | Zari Ragam'
+    default: 'ZARIRAGAM | Premium Kanchipuram Handloom Silk Sarees',
+    template: '%s | ZARIRAGAM',
   },
-  description: 'Buy authentic Kanchipuram silk sarees online at Zari Ragam. Premium quality wedding silk sarees, traditional designs, pure silk with gold zari work. Free shipping across India.',
+  description:
+    'ZARIRAGAM offers authentic Kanchipuram handloom silk sarees, pure silk sarees, bridal silk sarees, and customized silk sarees for weddings, festive occasions, temple wear, and traditional celebrations.',
   keywords: [
-    'Kanchipuram silk sarees online',
-    'buy silk sarees online',
-    'wedding silk sarees',
+    'ZARIRAGAM',
+    'Kanchipuram handloom silk sarees',
     'pure silk sarees',
-    'traditional silk sarees',
-    'gold zari sarees',
     'bridal silk sarees',
-    'Zari Ragam',
-    'silk sarees India',
-    'authentic Kanchipuram sarees'
+    'traditional silk sarees',
+    'handwoven silk sarees',
+    'Tamil Nadu silk sarees',
+    'customized silk sarees',
+    'wedding silk sarees',
   ],
-  authors: [{ name: 'Zari Ragam' }],
-  creator: 'Zari Ragam',
-  publisher: 'Zari Ragam',
-  formatDetection: {
-    email: false,
-    address: false,
-    telephone: false,
-  },
-  metadataBase: new URL('https://zariragam.com'),
+  metadataBase: new URL('https://zariragam.vercel.app'),
   alternates: {
     canonical: '/',
   },
   openGraph: {
-    title: 'Zari Ragam | Premium Kanchipuram Silk Sarees',
-    description: 'Discover authentic Kanchipuram silk sarees with traditional craftsmanship. Premium quality wedding and bridal silk sarees online.',
-    url: 'https://zariragam.com',
-    siteName: 'Zari Ragam',
-    images: [
-      {
-        url: '/og-image.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'Zari Ragam - Premium Kanchipuram Silk Sarees',
-      },
-    ],
+    title: 'ZARIRAGAM | Premium Kanchipuram Handloom Silk Sarees',
+    description:
+      'Authentic handwoven Kanchipuram silk sarees crafted with traditional craftsmanship.',
+    url: 'https://zariragam.vercel.app',
+    siteName: 'ZARIRAGAM',
+    // images: [
+    //   {
+    //     url: '/og-image.jpg',
+    //     width: 1200,
+    //     height: 630,
+    //     alt: 'ZARIRAGAM Premium Kanchipuram Handloom Silk Sarees',
+    //   },
+    // ],
     locale: 'en_IN',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Zari Ragam | Premium Kanchipuram Silk Sarees',
-    description: 'Authentic Kanchipuram silk sarees with traditional craftsmanship',
-    images: ['/og-image.jpg'],
+    title: 'ZARIRAGAM | Premium Kanchipuram Handloom Silk Sarees',
+    description:
+      'Authentic Kanchipuram handloom silk sarees and bridal silk sarees from ZARIRAGAM.',
+    // images: ['/og-image.jpg'],
   },
   robots: {
     index: true,
     follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
   },
-  verification: {
-    google: 'your-google-verification-code',
-  },
-}
+};
 
 export default function RootLayout({
   children
